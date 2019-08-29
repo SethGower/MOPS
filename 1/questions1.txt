@@ -1,59 +1,85 @@
 Lab 1: System Intro
 Activity 1: questions1.txt, warning.c : 30 points total
-Name: <<< YOUR NAME HERE >>>
+Name: Seth Zerishnek-Gower
 
 1. When you first log in, what is the absolute path of your home directory?
 
     <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+    /home/stu1/s11/sdg7234
 
 2. What command will list the contents of your current
 working directory, so that it shows the difference between
 files and directories without descending into any directories?
 
     <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+    ls
 
 3. What command would you use to change your working directory from
 your home directory to the existing subdirectory Courses/?
 
     <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+    cd Courses/
 
 4. Within the Courses/ subdirectory, what command would you use to
 create the subdirectory csci243/?
 
     <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+    mkdir csci243
 
-5. When warning.c is compiled as: 
+5. When warning.c is compiled as:
         gcc -o warning warning.c
     There is no indication of any warnings/problems, but there are issues.
-    
+
     a.) What compiler flags are used to enable the display of warnings?
-    
+
         <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+        -Wall: Enable "all" warnings
+        -Wextra: Enable _extra_ warnings
+        -Werror: Change warnings to errors
+        -pedantic: Be pickier
 	:  2 points
-    
+
     b.) In your own words, explain all warnings from compiling warning.c
 	with the recommended compilation options.
-    
+
         <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+        Using the compilation flags, mentioned above in 5a, the program was
+        compiled and a number of errors were produced
+
+            - The "compute" function had a couple of warnings, one of which
+              was the variable "b" was never used, but it was created. In
+              addition to this, the function is defined as an int function,
+              but it never returns any values.
+            - There are a couple of errors and warnings in "main". One of
+              which is the fact that an array is being defined using the macro
+              "SIZE", which is 0, and thus an array is being defined with a
+              size of 0, which is prohibited. Since an array is being defined
+              with a size of 0, the 1 inside of the array declaration, that is
+              contradicting the size.
+            - The main method has also been created incorrectly. If you are
+              going to use argc, you should also use argv. But since argc is
+              never used, it can be removed from the parameter list.
 	:  4 points
-    
+
     c.) Fix warning.c so it compiles without warning and runs correctly to
 	produce the output specified in the code documentation.
 
 	(Your answer is the submitted code.)
 	: 10 points
-    
+
     d.) There is a 'super-picky' warning flag; what is it and what problem
 	does it catch in warning.c?
 
         <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+        I don't know. I used pedantic originally
 	:  1 points
 
 
 6. What compiler flag compiles C programs using the ISO C99 standard?
 
     <<< YOUR ANSWER BELOW HERE (and do not remove this line)
-   
+    -std=c99
+
 7. Put the four steps of compilation process into their proper order from
 first to last.
 
@@ -61,6 +87,9 @@ first to last.
     B. Assemble
     C. Preprocess
     D. Compile
-    
-    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
 
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+    A. Preprocess
+    B. Compile
+    C. Assemble
+    D. Link
