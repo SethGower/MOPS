@@ -2,16 +2,15 @@
 /// description: simple main program uses the circle module.
 /// @author RIT CS Dept.
 
-#include <stdio.h>        // printf
-#include "circle.h"    // getArea, getCircumference
+#include "circle.h" // getArea, getCircumference
+#include <stdio.h>  // printf
 
 /// Computes and displays the area and circumference
 /// of a circle of a given radius.
 void compute(int radius) {
-    printf("Area of circle with radius %d: %f\n", 
-           radius, getArea(radius));
-    printf("Circumference of circle with radius %d: %f\n", 
-           radius, getCircumference(radius));
+    printf("Area of circle with radius %d: %f\n", radius, getArea(radius));
+    printf("Circumference of circle with radius %d: %f\n", radius,
+           getCircumference(radius));
 }
 
 /// main program uses the circle module.

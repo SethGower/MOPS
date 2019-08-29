@@ -1,19 +1,23 @@
 Lab 1: System Intro
 Activity 2: questions2.txt, main/circle code : 30 points total
-Name: <<< YOUR NAME HERE >>>
+Name: Seth Zerishnek-Gower
 
 8. Given the program files main.c, circle.h and circle.c:
 
     a.) What commands will compile the source files into object files?
-        
+
         <<< YOUR ANSWER BELOW HERE (and do not remove this line)
-        
+        gcc -c main.c circle.c
+
     b.) What command will link the object files
         into an executable named broken?
-        
-        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
-        
-    c.) Why does the program compile but fail to link?
-    
-        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
 
+        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+        gcc -o broken main.o circle.o
+
+    c.) Why does the program compile but fail to link?
+
+        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+        Because the function declaration in circle.c for the area funciton is
+        "getAreas" when the main.c is calling "getArea" (this took me wayyyyy
+        too long to notice)
