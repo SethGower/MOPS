@@ -17,6 +17,7 @@ void draw_square(int side, int indent, char ch) {
         }
         putchar('\n');
     }
+    putchar('\n');
 }
 
 int main() {
