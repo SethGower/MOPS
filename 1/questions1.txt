@@ -1,0 +1,66 @@
+Lab 1: System Intro
+Activity 1: questions1.txt, warning.c : 30 points total
+Name: <<< YOUR NAME HERE >>>
+
+1. When you first log in, what is the absolute path of your home directory?
+
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+
+2. What command will list the contents of your current
+working directory, so that it shows the difference between
+files and directories without descending into any directories?
+
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+
+3. What command would you use to change your working directory from
+your home directory to the existing subdirectory Courses/?
+
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+
+4. Within the Courses/ subdirectory, what command would you use to
+create the subdirectory csci243/?
+
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+
+5. When warning.c is compiled as: 
+        gcc -o warning warning.c
+    There is no indication of any warnings/problems, but there are issues.
+    
+    a.) What compiler flags are used to enable the display of warnings?
+    
+        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+	:  2 points
+    
+    b.) In your own words, explain all warnings from compiling warning.c
+	with the recommended compilation options.
+    
+        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+	:  4 points
+    
+    c.) Fix warning.c so it compiles without warning and runs correctly to
+	produce the output specified in the code documentation.
+
+	(Your answer is the submitted code.)
+	: 10 points
+    
+    d.) There is a 'super-picky' warning flag; what is it and what problem
+	does it catch in warning.c?
+
+        <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+	:  1 points
+
+
+6. What compiler flag compiles C programs using the ISO C99 standard?
+
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+   
+7. Put the four steps of compilation process into their proper order from
+first to last.
+
+    A. Link
+    B. Assemble
+    C. Preprocess
+    D. Compile
+    
+    <<< YOUR ANSWER BELOW HERE (and do not remove this line)
+
