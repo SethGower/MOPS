@@ -12,8 +12,8 @@
 /// @return year of the last presidential election
 
 int compute(int century) {
-    int b = century * 5;
-    return b;
+    int b = (century - 1) * 100;
+    return b + 16;
 }
 
 /// main computes and prints the year of the next presidential election.
@@ -21,11 +21,9 @@ int compute(int century) {
 /// @return 0 to tell the OS that the process ran to a success conclusion
 
 int main() {
-    int x[SIZE] = {1};
     int y = compute(21);
+    printf("Last Presidental Election: %d\n", y);
+    printf("Next Presidental Election: %d\n", y + 4);
 
-    printf("%d\n", y + x[0]);
-
-    if (y > 1000)
-        return 1;
+    return 0;
 }
