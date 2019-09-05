@@ -11,7 +11,7 @@ int main() {
         display_histogram(frequencies);
 
     } else {
-        fprintf(stderr, "No alphabetic characters read\n");
+        fprintf(stderr, "no alphabetic characters read\n");
     }
     return 0;
 }
