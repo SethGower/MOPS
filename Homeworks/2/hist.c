@@ -3,11 +3,17 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    printf("Hello World\n");
-    int *frequencies = calloc(26, sizeof(int));
-    read_text(frequencies);
-    for (int i = 0; i < 26; i++) {
-        printf("%c: %d\n", (char)(i + 65), frequencies[i]);
+    int *frequencies = calloc(HIST_SIZE, sizeof(int));
+    int nn = read_text(frequencies);
+
+    if (0 != nn) {
+        display_histogram(frequencies);
+        /* for (int i = 0; i < 26; i++) { */
+        /*     printf("%c: %d\n", (char)(i + 65), frequencies[i]); */
+        /* } */
+
+    } else {
+        printf("No alphabetic characters read\n");
     }
     return 0;
 }
@@ -48,4 +54,26 @@ int read_text(int *frequencies) {
  *                   int* frequencies - frequency list of letters
  * Return:           void
  *****************************************************************************/
-void display_histogram(int *frequencies) {}
+void display_histogram(int *frequencies) {
+    int i = 0;
+    int j = 0;
+    int highest = 0;
+    for (i = 0; i < HIST_SIZE; i++) {
+        if (frequencies[i] > highest) {
+            highest = frequencies[i];
+        }
+    }
+
+    for (i = highest; i > 0; i--) {
+        for (j = 0; j < HIST_SIZE; j++) {
+            if (i <= frequencies[j]) {
+                putchar('X');
+            } else {
+                putchar(' ');
+            }
+        }
+        putchar('\n');
+    }
+    printf("--------------------------\n");
+    printf("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+}
