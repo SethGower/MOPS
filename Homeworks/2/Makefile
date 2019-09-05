@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-std=c99 -g -Wall -pedantic -I $(INC_DIR) -lm
+CFLAGS=-std=c99 -g -Wall -Werror -Wextra -pedantic -I $(INC_DIR) -lm
 INC_DIR = ./include
 OUT_DIR = ./out
 BUILD_DIR = ./build
@@ -51,17 +51,17 @@ meme: all
 mem: meme
 
 test: all
-	@echo Testing with hist.c
-	- $(PROG) < hist.c
-	@echo =========================================
-	@echo Testing with box
-	- $(PROG) < ./texts/box
+# @echo Testing with hist.c
+# - $(PROG) < hist.c
+# @echo =========================================
+# @echo Testing with box
+# - $(PROG) < ./texts/box
 	@echo =========================================
 	@echo Testing with fox
 	- $(PROG) < ./texts/fox
-	@echo =========================================
-	@echo Testing with empty
-	- $(PROG) < ./texts/empty
+# @echo =========================================
+# @echo Testing with empty
+# - $(PROG) < ./texts/empty
 
 create_outputdir:
 	$(shell mkdir $(OBJ_FOLDER) 2> /dev/null)

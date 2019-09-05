@@ -2,15 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[]) {
+int main() {
     int *frequencies = calloc(HIST_SIZE, sizeof(int));
     int nn = read_text(frequencies);
 
     if (0 != nn) {
+        printf("%d alphabetic characters read\n", nn);
         display_histogram(frequencies);
-        /* for (int i = 0; i < 26; i++) { */
-        /*     printf("%c: %d\n", (char)(i + 65), frequencies[i]); */
-        /* } */
 
     } else {
         printf("No alphabetic characters read\n");
