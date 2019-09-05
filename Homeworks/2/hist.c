@@ -56,20 +56,27 @@ void display_histogram(int *frequencies) {
     int i = 0;
     int j = 0;
     int highest = 0;
+    /* determines the highest frequency character in the set */
     for (i = 0; i < HIST_SIZE; i++) {
         if (frequencies[i] > highest) {
             highest = frequencies[i];
         }
     }
 
+    /* nested for loop to iterate through the matrix of characters */
+    /* outer loop creates the rows, where the number of rows is the highest
+     * amount of characters in the set */
     for (i = highest; i > 0; i--) {
         for (j = 0; j < HIST_SIZE; j++) {
+            /* if the current index is less than or equal to the frequency of
+             * the current letter, then put an X, else put a space */
             if (i <= frequencies[j]) {
                 putchar('X');
             } else {
                 putchar(' ');
             }
         }
+        /* go to the next line */
         putchar('\n');
     }
     printf("--------------------------\n");
