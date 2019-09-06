@@ -40,13 +40,8 @@ gdb: all
 	gdb $(PROG)
 
 meme: all
-	- $(VAL) $(PROG) -b -t 1e-6 -g -2.5 -u 2.5 &> $(OUT_DIR)/mem.txt
-	- $(VAL) $(PROG) -n -t 1e-6 -g -1.5  &>> $(OUT_DIR)/mem.txt
-	- $(VAL) $(PROG) -s -t 1e-6 -g -1.5  &>> $(OUT_DIR)/mem.txt
-	- $(VAL) $(INT_PROG) &>> $(OUT_DIR)/mem.txt
-	- $(VAL) $(QUAD_PROG) &>> $(OUT_DIR)/mem.txt
+	- $(VAL) $(PROG) < ./texts/box &>> $(OUT_DIR)/mem.txt
 	@cat $(OUT_DIR)/mem.txt
-	@cat $(BIN_FOLDER)mem.txt
 
 mem: meme
 

@@ -1,3 +1,12 @@
+/******************************************************************************
+* File:             hist.c
+*
+* Author:           Seth Gower  
+* Created:          09/06/19 
+* Description:      Histogram program to read in standard input and create a
+*                   histogram of the number of characters
+*****************************************************************************/
+
 #include "hist.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,14 +15,18 @@ int main() {
     int *frequencies = calloc(HIST_SIZE, sizeof(int));
     int nn = read_text(frequencies);
 
-    if (0 != nn) {
-        printf("%d alphabetic characters read\n", nn);
-        display_histogram(frequencies);
+    if (NULL != frequencies) {
+        if (0 != nn) {
+            printf("%d alphabetic characters read\n", nn);
+            display_histogram(frequencies);
 
-    } else {
-        fprintf(stderr, "no alphabetic characters read\n");
+        } else {
+            fprintf(stderr, "no alphabetic characters read\n");
+        }
+        free(frequencies);
+        return 0;
     }
-    return 0;
+    return -1;
 }
 
 /******************************************************************************
