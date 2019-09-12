@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void header(void) /*function for program header*/
 {
@@ -33,7 +34,8 @@ void survivalRule(char life[][20], int x, int y) {
     int neighbors = 0;
     for (row = 1; row < 19; row++) {
         for (col = 1; col < 19; col++) {
-            if (&life[row][col] == "*") {
+            if (strcmp(&life[row][col], "*")) {
+                // fix 2: bad comparison. Changed to strcmp
                 if (life[row - 1][col - 1] == '*')
                     ++neighbors;
                 if (life[row - 1][col] == '*')
@@ -51,7 +53,7 @@ void survivalRule(char life[][20], int x, int y) {
                 if (life[row + 1][col + 1] == '*')
                     ++neighbors;
                 if (neighbors == 2 || neighbors == 3) {
-                    life[row][col] == '*';
+                    life[row][col] = '*'; // fix 2: was using conditional test
                 }
             }
         }
@@ -64,7 +66,8 @@ void birthRule(char life[][20], int x, int y) {
     int neighbors = 0;
     for (row = 1; row < 19; row++) {
         for (col = 1; col < 19; col++) {
-            if (&life[row][col] == " ") {
+            if (strcmp(&life[row][col], " ")) {
+                // fix 2: bad comparison. Changed to strcmp
                 if (life[row - 1][col - 1] == '*')
                     neighbors++;
                 if (life[row - 1][col] == '*')
@@ -82,7 +85,7 @@ void birthRule(char life[][20], int x, int y) {
                 if (life[row + 1][col + 1] == '*')
                     neighbors++;
                 if (neighbors == 3) {
-                    life[row][col] == '*';
+                    life[row][col] = '*'; // fix 2: was using conditional test
                 }
             }
         }
@@ -112,13 +115,13 @@ int main(void) {
         row %= 20;
         col = rand();
         col %= 20;
-        life[row][col] == '*';
+        life[row][col] = '*';
     }
 
     for (row = 0; row < 20; row++) {
         for (col = 0; col < 20; col++) {
             if (life[row][col] != '*')
-                life[row][col] == ' ';
+                life[row][col] = ' ';
         }
     }
 
