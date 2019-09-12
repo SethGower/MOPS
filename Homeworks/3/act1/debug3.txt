@@ -1,0 +1,55 @@
++b 127
+Breakpoint 1 at [34m0x17d0[m: file [32mgood-life.c[m, line 127.
++r
+Starting program: /home/seth/Documents/Courses/MOPS/Homeworks/3/act1/good-life
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++p row
+$1 = 0
++p col
+$2 = 0
++p life[row][col]
+$3 = -48 '\320'
++continue 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++p row
+$4 = 0
++p col
+$5 = 19
++p life[row][col]
+$6 = -9 '\367'
++c 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++c 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++c 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++c 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
++c 19
+Will ignore next 18 crossings of breakpoint 1.  Continuing.
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
+
+
+The problem in this debugging activity was the incorrect use of `==` instead
+of `=` in the new assigment after death and birth of a node. Another problem
+was the comparison of two strings using `==`, which isn't OK. I switched it to
+use strcmp instead.

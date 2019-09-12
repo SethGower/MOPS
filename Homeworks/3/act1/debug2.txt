@@ -1,0 +1,37 @@
+
+Breakpoint 1, [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%s", life[row][col]);
+(gdb)l
+122	        }
+123	    }
+124	
+125	    for (row = 0; row < 20; row++) {
+126	        for (col = 0; col < 20; col++) {
+127	            printf("%s", life[row][col]);
+128	        }
+129	        puts(" ");
+130	    }
+131	
+(gdb)info break
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   [34m0x00005555555557c0[m in [33mmain[m at [32mgood-life.c[m:127
+	breakpoint already hit 1 time
+(gdb)display row
+1: row = 0
+(gdb)p col
+$1 = 0
+(gdb)whatis life
+type = char [20][20]
+(gdb)n
+
+Program received signal SIGSEGV, Segmentation fault.
+[34m0x00007ffff7f1ac55[m in [33m__strlen_avx2[m () from /usr/lib/libc.so.6
+(gdb)q
+
+
+The error that was causing the Segmentation faults was an erronious use of %s
+instead of %c when printing from the life array. Since these are characters,
+and the format string said they were strings, it was looking for a null
+terminator, and didn't find it. While searching for the null terminator, it
+eventually ran past the Segmentation allowed for the array, thus causing a
+segfault. 

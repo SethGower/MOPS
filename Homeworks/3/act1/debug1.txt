@@ -1,0 +1,33 @@
+(gdb)r
+Starting program: /home/seth/Documents/Courses/MOPS/Homeworks/3/act1/good-life 
+
+Program received signal SIGSEGV, Segmentation fault.
+[34m0x00007ffff7f1ac55[m in [33m__strlen_avx2[m () from /usr/lib/libc.so.6
+(gdb)where
+#0  [34m0x00007ffff7f1ac55[m in [33m__strlen_avx2[m () from /usr/lib/libc.so.6
+#1  [34m0x00007ffff7e2655e[m in [33m__vfprintf_internal[m () from /usr/lib/libc.so.6
+#2  [34m0x00007ffff7e117ff[m in [33mprintf[m () from /usr/lib/libc.so.6
+#3  [34m0x0000555555555805[m in [33mmain[m () at [32mgood-life.c[m:127
+(gdb)frame 3
+#3  [34m0x0000555555555805[m in [33mmain[m () at [32mgood-life.c[m:127
+127	            printf("%s", life[row][col]);
+(gdb)l
+122	        }
+123	    }
+124	
+125	    for (row = 0; row < 20; row++) {
+126	        for (col = 0; col < 20; col++) {
+127	            printf("%s", life[row][col]);
+128	        }
+129	        puts(" ");
+130	    }
+131	
+(gdb)break
+Breakpoint 1 at [34m0x555555555805[m: file [32mgood-life.c[m, line 126.
+(gdb)b 127
+Breakpoint 2 at [34m0x5555555557c0[m: file [32mgood-life.c[m, line 127.
+(gdb)delete breakpoint 1
+(gdb)info break
+Num     Type           Disp Enb Address            What
+2       breakpoint     keep y   [34m0x00005555555557c0[m in [33mmain[m at [32mgood-life.c[m:127
+(gdb)q
