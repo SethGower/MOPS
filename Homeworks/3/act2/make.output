@@ -1,0 +1,29 @@
+gcc -std=c99 -ggdb -Wall -Wextra -pedantic  -c good-life.c
+good-life.c: In function ‘survivalRule’:
+good-life.c:32:40: warning: unused parameter ‘x’ [-Wunused-parameter]
+   32 | void survivalRule(char life[][20], int x, int y) {
+      |                                    ~~~~^
+good-life.c:32:47: warning: unused parameter ‘y’ [-Wunused-parameter]
+   32 | void survivalRule(char life[][20], int x, int y) {
+      |                                           ~~~~^
+good-life.c: In function ‘birthRule’:
+good-life.c:64:37: warning: unused parameter ‘x’ [-Wunused-parameter]
+   64 | void birthRule(char life[][20], int x, int y) {
+      |                                 ~~~~^
+good-life.c:64:44: warning: unused parameter ‘y’ [-Wunused-parameter]
+   64 | void birthRule(char life[][20], int x, int y) {
+      |                                        ~~~~^
+good-life.c: In function ‘main’:
+good-life.c:104:10: warning: unused variable ‘ans’ [-Wunused-variable]
+  104 |     char ans;
+      |          ^~~
+good-life.c:100:15: warning: unused variable ‘b’ [-Wunused-variable]
+  100 |     int i, a, b, row, col;
+      |               ^
+good-life.c:100:12: warning: unused variable ‘a’ [-Wunused-variable]
+  100 |     int i, a, b, row, col;
+      |            ^
+good-life.c:99:15: warning: unused variable ‘gens’ [-Wunused-variable]
+   99 |     int orgs, gens = 0;
+      |               ^~~~
+gcc -std=c99 -ggdb -Wall -Wextra -pedantic -o good-life good-life.o  -lm 

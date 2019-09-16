@@ -29,7 +29,7 @@ void header(void) /*function for program header*/
     printf("\n\t..Welcome to the Game of life..\n");
 }
 
-void survivalRule(char life[][20], int x, int y) {
+void survivalRule(char life[][20]) { // fix 1: removed the unused x and y
     int row, col;
     int neighbors = 0;
     for (row = 1; row < 19; row++) {
@@ -61,7 +61,7 @@ void survivalRule(char life[][20], int x, int y) {
     return;
 }
 
-void birthRule(char life[][20], int x, int y) {
+void birthRule(char life[][20]) { // fix 2: removed the unused x and y
     int row, col;
     int neighbors = 0;
     for (row = 1; row < 19; row++) {
@@ -96,12 +96,11 @@ void birthRule(char life[][20], int x, int y) {
 
 int main(void) {
     char life[20][20];
-    int orgs, gens;
-    int i, a, b, row, col;
+    int orgs; // fix 3: removed gens
+    int i, row, col;
     int count = 0;
-    int x = 19;
-    int y = 19;
-    char ans;
+    /* int x = 19; */ // fix 4: removed unused x and y
+    /* int y = 19; */
 
     header();
 
@@ -132,9 +131,9 @@ int main(void) {
         puts(" ");
     }
 
-    while (1) {
-        birthRule(life, x, y);
-        survivalRule(life, x, y);
+    while (count < 100) { // changed limit to 100 generations (count)
+        birthRule(life);
+        survivalRule(life);
         for (row = 0; row < 20; row++) {
             for (col = 0; col < 20; col++) {
                 printf("%c", life[row][col]);
