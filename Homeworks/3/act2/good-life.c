@@ -28,72 +28,61 @@ void header(void) /*function for program header*/
 }
 
 // fix 1 removed unused parameter
-void survivalRule(int size, char life[size][size]) {
-    int row, col;
-    int neighbors = 0;
-    for (row = 1; row < size - 1; row++) {
-        for (col = 1; col < size - 1; col++) {
-            if (strcmp(&life[row][col], "*")) {
-                // fix 2: bad comparison. Changed to strcmp
-                if (life[row - 1][col - 1] == '*')
-                    ++neighbors;
-                if (life[row - 1][col] == '*')
-                    ++neighbors;
-                if (life[row - 1][col + 1] == '*')
-                    ++neighbors;
-                if (life[row][col - 1] == '*')
-                    ++neighbors;
-                if (life[row][col + 1] == '*')
-                    ++neighbors;
-                if (life[row + 1][col - 1] == '*')
-                    ++neighbors;
-                if (life[row + 1][col] == '*')
-                    ++neighbors;
-                if (life[row + 1][col + 1] == '*')
-                    ++neighbors;
-                if (neighbors == 2 || neighbors == 3) {
-                    life[row][col] = '*'; // fix 2: was using conditional test
+
+void transition(const int size, char life[][size]) {
+    char nextLife[size][size];
+    int row, col, neighbors = 0;
+
+    for (row = 0; row < size; row++) {
+        for (col = 0; col < size; col++) {
+            neighbors = 0;
+            if (0 != row && 0 != col && size != row && size != col) {
+                if (0 != row && 0 != col)
+                    if (life[row - 1][col - 1] == '*')
+                        neighbors++;
+                if (0 != row)
+                    if (life[row - 1][col] == '*')
+                        neighbors++;
+                if (0 != row && size != col)
+                    if (life[row - 1][col + 1] == '*')
+                        neighbors++;
+                if (0 != col)
+                    if (life[row][col - 1] == '*')
+                        neighbors++;
+                if (size != col)
+                    if (life[row][col + 1] == '*')
+                        neighbors++;
+                if (size != row && 0 != col)
+                    if (life[row + 1][col - 1] == '*')
+                        neighbors++;
+                if (size != row)
+                    if (life[row + 1][col] == '*')
+                        neighbors++;
+                if (size != row && size != col)
+                    if (life[row + 1][col + 1] == '*')
+                        neighbors++;
+            }
+
+            if (life[row][col] == '*') {
+                if (2 > neighbors || 3 < neighbors) {
+                    nextLife[row][col] = ' ';
+                } else {
+                    nextLife[row][col] = '*';
                 }
+            } else {
+                if (3 == neighbors)
+                    nextLife[row][col] = '*';
+                else
+                    nextLife[row][col] = ' ';
             }
         }
     }
-    return;
-}
-
-// fix 2: removed the unused x and y
-void birthRule(int size, char life[size][size]) {
-    int row, col;
-    int neighbors = 0;
-    for (row = 1; row < GRID_SIZE - 1; row++) {
-        for (col = 1; col < GRID_SIZE - 1; col++) {
-            if (strcmp(&life[row][col], " ")) {
-                // fix 2: bad comparison. Changed to strcmp
-                if (life[row - 1][col - 1] == '*')
-                    neighbors++;
-                if (life[row - 1][col] == '*')
-                    neighbors++;
-                if (life[row - 1][col + 1] == '*')
-                    neighbors++;
-                if (life[row][col - 1] == '*')
-                    neighbors++;
-                if (life[row][col + 1] == '*')
-                    neighbors++;
-                if (life[row + 1][col - 1] == '*')
-                    neighbors++;
-                if (life[row + 1][col] == '*')
-                    neighbors++;
-                if (life[row + 1][col + 1] == '*')
-                    neighbors++;
-                if (neighbors == 3) {
-                    life[row][col] = '*'; // fix 2: was using conditional test
-                }
-            }
+    for (row = 0; row < size; row++) {
+        for (col = 0; col < size; col++) {
+            life[row][col] = nextLife[row][col];
         }
     }
-
-    return;
 }
-
 int main(void) {
     char life[GRID_SIZE][GRID_SIZE];
     int orgs; // fix 3: removed gens
@@ -107,7 +96,7 @@ int main(void) {
     printf("\nPlease enter the initial number of organisms: ");
     scanf("%i", &orgs);
 
-    srand(31);
+    srand(41);
 
     for (i = 0; i < orgs; i++) {
         row = rand();
@@ -126,14 +115,14 @@ int main(void) {
 
     for (row = 0; row < GRID_SIZE; row++) {
         for (col = 0; col < GRID_SIZE; col++) {
-            printf("%c", life[row][col]); // fix 1: changed %s to %c for char
+            printf("%c",
+                   life[row][col]); // fix 1: changed %s to %c for char
         }
         puts(" ");
     }
 
     while (count < GEN_LIMIT) { // changed limit to GEN_LIMIT generations
-        birthRule(GRID_SIZE, life);
-        survivalRule(GRID_SIZE, life);
+        transition(GRID_SIZE, life);
         for (row = 0; row < GRID_SIZE; row++) {
             for (col = 0; col < GRID_SIZE; col++) {
                 printf("%c", life[row][col]);
