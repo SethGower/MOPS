@@ -20,16 +20,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define GRID_SIZE 20
+#define GEN_LIMIT 100
 void header(void) /*function for program header*/
 {
     printf("\n\t..Welcome to the Game of life..\n");
 }
 
-void survivalRule(char life[][20]) { // fix 1: removed the unused x and y
+void survivalRule(char life[][GRID_SIZE]) { // fix 1: removed the unused x and y
     int row, col;
     int neighbors = 0;
-    for (row = 1; row < 19; row++) {
-        for (col = 1; col < 19; col++) {
+    for (row = 1; row < GRID_SIZE - 1; row++) {
+        for (col = 1; col < GRID_SIZE - 1; col++) {
             if (strcmp(&life[row][col], "*")) {
                 // fix 2: bad comparison. Changed to strcmp
                 if (life[row - 1][col - 1] == '*')
@@ -57,11 +59,11 @@ void survivalRule(char life[][20]) { // fix 1: removed the unused x and y
     return;
 }
 
-void birthRule(char life[][20]) { // fix 2: removed the unused x and y
+void birthRule(char life[][GRID_SIZE]) { // fix 2: removed the unused x and y
     int row, col;
     int neighbors = 0;
-    for (row = 1; row < 19; row++) {
-        for (col = 1; col < 19; col++) {
+    for (row = 1; row < GRID_SIZE - 1; row++) {
+        for (col = 1; col < GRID_SIZE - 1; col++) {
             if (strcmp(&life[row][col], " ")) {
                 // fix 2: bad comparison. Changed to strcmp
                 if (life[row - 1][col - 1] == '*')
@@ -91,12 +93,12 @@ void birthRule(char life[][20]) { // fix 2: removed the unused x and y
 }
 
 int main(void) {
-    char life[20][20];
+    char life[GRID_SIZE][GRID_SIZE];
     int orgs; // fix 3: removed gens
     int i, row, col;
     int count = 0;
-    /* int x = 19; */ // fix 4: removed unused x and y
-    /* int y = 19; */
+    /* int x = GRID_SIZE -1; */ // fix 4: removed unused x and y
+    /* int y = GRID_SIZE -1; */
 
     header();
 
@@ -107,31 +109,31 @@ int main(void) {
 
     for (i = 0; i < orgs; i++) {
         row = rand();
-        row %= 20;
+        row %= GRID_SIZE;
         col = rand();
-        col %= 20;
+        col %= GRID_SIZE;
         life[row][col] = '*';
     }
 
-    for (row = 0; row < 20; row++) {
-        for (col = 0; col < 20; col++) {
+    for (row = 0; row < GRID_SIZE; row++) {
+        for (col = 0; col < GRID_SIZE; col++) {
             if (life[row][col] != '*')
                 life[row][col] = ' ';
         }
     }
 
-    for (row = 0; row < 20; row++) {
-        for (col = 0; col < 20; col++) {
+    for (row = 0; row < GRID_SIZE; row++) {
+        for (col = 0; col < GRID_SIZE; col++) {
             printf("%c", life[row][col]); // fix 1: changed %s to %c for char
         }
         puts(" ");
     }
 
-    while (count < 100) { // changed limit to 100 generations (count)
+    while (count < GEN_LIMIT) { // changed limit to GEN_LIMIT generations
         birthRule(life);
         survivalRule(life);
-        for (row = 0; row < 20; row++) {
-            for (col = 0; col < 20; col++) {
+        for (row = 0; row < GRID_SIZE; row++) {
+            for (col = 0; col < GRID_SIZE; col++) {
                 printf("%c", life[row][col]);
             }
             puts(" ");
