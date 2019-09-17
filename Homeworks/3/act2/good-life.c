@@ -4,11 +4,7 @@
 ///
 /// This code needs serious work in these areas:
 /// <ol>
-/// <li>  syntax: there are a number of warnings that cause errors.
-/// </li>
 /// <li>  semantics: the game algorithm implementation is incorrect.
-/// </li>
-/// <li>  design: the implementation needs function and value refactoring.
 /// </li>
 /// <li>  style: formatting is poor; the mix of TAB and spaces indentation
 /// needs correction, and spacing between tokens is inconsistent.
