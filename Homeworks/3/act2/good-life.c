@@ -27,11 +27,12 @@ void header(void) /*function for program header*/
     printf("\n\t..Welcome to the Game of life..\n");
 }
 
-void survivalRule(char life[][GRID_SIZE]) { // fix 1: removed the unused x and y
+// fix 1 removed unused parameter
+void survivalRule(int size, char life[size][size]) {
     int row, col;
     int neighbors = 0;
-    for (row = 1; row < GRID_SIZE - 1; row++) {
-        for (col = 1; col < GRID_SIZE - 1; col++) {
+    for (row = 1; row < size - 1; row++) {
+        for (col = 1; col < size - 1; col++) {
             if (strcmp(&life[row][col], "*")) {
                 // fix 2: bad comparison. Changed to strcmp
                 if (life[row - 1][col - 1] == '*')
@@ -59,7 +60,8 @@ void survivalRule(char life[][GRID_SIZE]) { // fix 1: removed the unused x and y
     return;
 }
 
-void birthRule(char life[][GRID_SIZE]) { // fix 2: removed the unused x and y
+// fix 2: removed the unused x and y
+void birthRule(int size, char life[size][size]) {
     int row, col;
     int neighbors = 0;
     for (row = 1; row < GRID_SIZE - 1; row++) {
@@ -130,8 +132,8 @@ int main(void) {
     }
 
     while (count < GEN_LIMIT) { // changed limit to GEN_LIMIT generations
-        birthRule(life);
-        survivalRule(life);
+        birthRule(GRID_SIZE, life);
+        survivalRule(GRID_SIZE, life);
         for (row = 0; row < GRID_SIZE; row++) {
             for (col = 0; col < GRID_SIZE; col++) {
                 printf("%c", life[row][col]);
