@@ -44,26 +44,26 @@ CPP = $(CPP) $(CPPFLAGS)
 ########## Flags from header.mak
 
 CFLAGS =	-std=c99 -ggdb -Wall -Wextra -pedantic
-CLIBFLAGS =	-lm 
+CLIBFLAGS =	-lm
 
 
 ########## End of flags from header.mak
 
 
-CPP_FILES =	
+CPP_FILES =
 C_FILES =	good-life.c
-PS_FILES =	
-S_FILES =	
-H_FILES =	
+PS_FILES =
+S_FILES =
+H_FILES =
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	
+OBJFILES =
 
 #
 # Main targets
 #
 
-all:	good-life 
+all:	good-life
 
 good-life:	good-life.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o good-life good-life.o $(OBJFILES) $(CLIBFLAGS)
@@ -72,7 +72,7 @@ good-life:	good-life.o $(OBJFILES)
 # Dependencies
 #
 
-good-life.o:	
+good-life.o:
 
 #
 # Housekeeping
@@ -87,4 +87,7 @@ clean:
 	-/bin/rm -f $(OBJFILES) good-life.o core
 
 realclean:        clean
-	-/bin/rm -f good-life 
+	-/bin/rm -f good-life
+
+run:	good-life
+	echo 321 | ./good-life
