@@ -27,42 +27,45 @@ void header(void) /*function for program header*/
     printf("\n\t..Welcome to the Game of life..\n");
 }
 
+int countNeighbors(int size, char life[][size], int row, int col) {
+    int neighbors = 0;
+    // if it is in the center
+    if (0 != row && 0 != col && size != row && size != col) {
+        if (0 != row && 0 != col) // if not bottom left corner
+            if (life[row - 1][col - 1] == '*')
+                neighbors++;
+        if (0 != row) // if not bottom row
+            if (life[row - 1][col] == '*')
+                neighbors++;
+        if (0 != row && size != col) // if not bottom right corner
+            if (life[row - 1][col + 1] == '*')
+                neighbors++;
+        if (0 != col) // if not left column
+            if (life[row][col - 1] == '*')
+                neighbors++;
+        if (size != col) // if not right column
+            if (life[row][col + 1] == '*')
+                neighbors++;
+        if (size != row && 0 != col)
+            if (life[row + 1][col - 1] == '*')
+                neighbors++;
+        if (size != row)
+            if (life[row + 1][col] == '*')
+                neighbors++;
+        if (size != row && size != col)
+            if (life[row + 1][col + 1] == '*')
+                neighbors++;
+    } 
+    return neighbors;
+}
 // fix 1 removed unused parameter
-
 void transition(const int size, char life[][size]) {
     char nextLife[size][size];
     int row, col, neighbors = 0;
 
     for (row = 0; row < size; row++) {
         for (col = 0; col < size; col++) {
-            neighbors = 0;
-            if (0 != row && 0 != col && size != row && size != col) {
-                if (0 != row && 0 != col)
-                    if (life[row - 1][col - 1] == '*')
-                        neighbors++;
-                if (0 != row)
-                    if (life[row - 1][col] == '*')
-                        neighbors++;
-                if (0 != row && size != col)
-                    if (life[row - 1][col + 1] == '*')
-                        neighbors++;
-                if (0 != col)
-                    if (life[row][col - 1] == '*')
-                        neighbors++;
-                if (size != col)
-                    if (life[row][col + 1] == '*')
-                        neighbors++;
-                if (size != row && 0 != col)
-                    if (life[row + 1][col - 1] == '*')
-                        neighbors++;
-                if (size != row)
-                    if (life[row + 1][col] == '*')
-                        neighbors++;
-                if (size != row && size != col)
-                    if (life[row + 1][col + 1] == '*')
-                        neighbors++;
-            }
-
+            neighbors = countNeighbors(size, life, row, col);
             if (life[row][col] == '*') {
                 if (2 > neighbors || 3 < neighbors) {
                     nextLife[row][col] = ' ';
