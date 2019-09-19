@@ -43,27 +43,27 @@ COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c
 CPP = $(CPP) $(CPPFLAGS)
 ########## Flags from header.mak
 
-CFLAGS =	-std=c99 -ggdb -Wall -Wextra -pedantic
-CLIBFLAGS =	-lm 
+CFLAGS =	-std=c99 -ggdb -Wall -Wextra -pedantic -Iinclude
+CLIBFLAGS =	-lm
 
 
 ########## End of flags from header.mak
 
 
-CPP_FILES =	
+CPP_FILES =
 C_FILES =	display.c good-life.c
-PS_FILES =	
-S_FILES =	
+PS_FILES =
+S_FILES =
 H_FILES =	display.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	display.o 
+OBJFILES =	display.o
 
 #
 # Main targets
 #
 
-all:	good-life 
+all:	good-life
 
 good-life:	good-life.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o good-life good-life.o $(OBJFILES) $(CLIBFLAGS)
@@ -72,8 +72,8 @@ good-life:	good-life.o $(OBJFILES)
 # Dependencies
 #
 
-display.o:	display.h
-good-life.o:	
+display.o:	./include/display.h
+good-life.o:
 
 #
 # Housekeeping
@@ -88,4 +88,7 @@ clean:
 	-/bin/rm -f $(OBJFILES) good-life.o core
 
 realclean:        clean
-	-/bin/rm -f good-life 
+	-/bin/rm -f good-life
+
+run: good-life
+	echo 321 | ./good-life

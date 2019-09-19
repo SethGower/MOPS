@@ -16,13 +16,15 @@
 /// </ol>
 ///
 
+#define _DEFAULT_SOURCE
+#include "display.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#define GRID_SIZE 20
 #define GEN_LIMIT 100
+#define GRID_SIZE 20
 void header(void) /*function for program header*/
 {
     printf("\n\t..Welcome to the Game of life..\n");
@@ -119,8 +121,15 @@ void transition(const int size, char life[][size]) {
     }
 }
 
-int main(void) {
-    char life[GRID_SIZE][GRID_SIZE];
+int main(int argc, char *argv[]) {
+    int grid_size = 0;
+    /* allows the user to specify grid size */
+    if (1 < argc)
+        grid_size = atoi(argv[1]);
+    else
+        grid_size = GRID_SIZE;
+
+    char life[grid_size][grid_size];
     int orgs; // fix 3: removed gens
     int i, row, col;
     int count = 0;
@@ -131,41 +140,39 @@ int main(void) {
     scanf("%i", &orgs);
     putchar('\n');
 
-    srand(41);
+    srand(31);
 
     for (i = 0; i < orgs; i++) {
         row = rand();
-        row %= GRID_SIZE;
+        row %= grid_size;
         col = rand();
-        col %= GRID_SIZE;
+        col %= grid_size;
         life[row][col] = '*';
     }
 
-    for (row = 0; row < GRID_SIZE; row++) {
-        for (col = 0; col < GRID_SIZE; col++) {
-            if (life[row][col] != '*')
-                life[row][col] = ' ';
-        }
-    }
-
     printf("Initial Case\n");
-    for (row = 0; row < GRID_SIZE; row++) {
-        for (col = 0; col < GRID_SIZE; col++) {
-            putchar(life[row][col]); // fix 1: changed to putchar
+    usleep(90000);
+    for (row = 0; row < grid_size; row++) {
+        for (col = 0; col < grid_size; col++) {
+            put(life[row][col]); // fix 1: changed to putchar
         }
         putchar('\n');
     }
 
-    while (count < GEN_LIMIT) { // changed limit to GEN_LIMIT generations
-        transition(GRID_SIZE, life);
+    while (1) { // changed limit to GEN_LIMIT generations
+        clear();
+        set_cur_pos(0, 0);
+
+        transition(grid_size, life);
+
         printf("\ngeneration: %d\n", count);
-        for (row = 0; row < GRID_SIZE; row++) {
-            for (col = 0; col < GRID_SIZE; col++) {
-                putchar(life[row][col]); // fix 1: changed to putchar
+        for (row = 0; row < grid_size; row++) {
+            for (col = 0; col < grid_size; col++) {
+                put(life[row][col]); // fix 1: changed to putchar
             }
             putchar('\n');
         }
-        count++;
+        usleep(81000);
     }
 
     return 0;
