@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define GRID_SIZE 20
 #define GEN_LIMIT 100
@@ -27,45 +28,74 @@ void header(void) /*function for program header*/
     printf("\n\t..Welcome to the Game of life..\n");
 }
 
-int countNeighbors(int size, char life[][size], int row, int col) {
+/******************************************************************************
+ * Function:         int mod
+ *                   Simple function to allow modulo of negative nubmers
+ * Where:
+ *                   int a - Operand A
+ *                   int b - Operand B
+ * Return:           modulo of a%b
+ * Error:            none
+ *****************************************************************************/
+int mod(const int a, const int b) {
+    int r = a % b;
+    return r < 0 ? r + b : r;
+}
+/******************************************************************************
+ * Function:         int countNeighbors
+ *                   Function to count neighbors of cell at coords row,col
+ * Where:
+ *                   int size - Size of the grid
+ *                   char life[][size] - matrix for the game of life board
+ *                   int row - row coordinate for cell to check
+ *                   int col - column coordinate for cell to check
+ * Return:           int neighborsNumber of neighbors to that cell (max 8)
+ * Error:            None
+ *****************************************************************************/
+int countNeighbors(const int size, char life[][size], const int row,
+                   const int col) {
     int neighbors = 0;
-    // if it is in the center
-    if (0 != row && 0 != col && size != row && size != col) {
-        if (0 != row && 0 != col) // if not bottom left corner
-            if (life[row - 1][col - 1] == '*')
+    int i, j;
+    int curr_row, curr_col;
+    /*
+     * Loop to iterate through the 3x3 matrix around the cell in question
+     */
+    for (i = -1; i < 2; i++) {
+        for (j = -1; j < 2; j++) {
+            /* check if cell is the one in question */
+            if (0 == i && j == 0)
+                continue;
+            curr_row = mod(row + i, size);
+            curr_col = mod(col + j, size);
+
+            /* using the current row and column which is being checked, check
+             * if it is a living cell, if it is increment neighbors */
+            if (life[curr_row][curr_col] == '*')
                 neighbors++;
-        if (0 != row) // if not bottom row
-            if (life[row - 1][col] == '*')
-                neighbors++;
-        if (0 != row && size != col) // if not bottom right corner
-            if (life[row - 1][col + 1] == '*')
-                neighbors++;
-        if (0 != col) // if not left column
-            if (life[row][col - 1] == '*')
-                neighbors++;
-        if (size != col) // if not right column
-            if (life[row][col + 1] == '*')
-                neighbors++;
-        if (size != row && 0 != col)
-            if (life[row + 1][col - 1] == '*')
-                neighbors++;
-        if (size != row)
-            if (life[row + 1][col] == '*')
-                neighbors++;
-        if (size != row && size != col)
-            if (life[row + 1][col + 1] == '*')
-                neighbors++;
-    } 
+        }
+    }
     return neighbors;
 }
 // fix 1 removed unused parameter
+/******************************************************************************
+ * Function:         void transition
+ *                   Apply the rules for whether if the cells live or die
+ * Where:
+ *                   const int size - size of the matrix
+ *                   char life[][size] - matrix grid for Game of Life
+ * Return:           N/A
+ * Error:            None
+ *****************************************************************************/
 void transition(const int size, char life[][size]) {
+    /* temporary variable for the new game of life */
     char nextLife[size][size];
     int row, col, neighbors = 0;
 
+    /* iteerate through all of the grid */
     for (row = 0; row < size; row++) {
         for (col = 0; col < size; col++) {
             neighbors = countNeighbors(size, life, row, col);
+            /* applies actual rules for each cell in grid */
             if (life[row][col] == '*') {
                 if (2 > neighbors || 3 < neighbors) {
                     nextLife[row][col] = ' ';
@@ -80,24 +110,26 @@ void transition(const int size, char life[][size]) {
             }
         }
     }
+    /* iterates through the entire grid, and updates the old grid with new
+     * grid */
     for (row = 0; row < size; row++) {
         for (col = 0; col < size; col++) {
             life[row][col] = nextLife[row][col];
         }
     }
 }
+
 int main(void) {
     char life[GRID_SIZE][GRID_SIZE];
     int orgs; // fix 3: removed gens
     int i, row, col;
     int count = 0;
-    /* int x = GRID_SIZE -1; */ // fix 4: removed unused x and y
-    /* int y = GRID_SIZE -1; */
 
     header();
 
     printf("\nPlease enter the initial number of organisms: ");
     scanf("%i", &orgs);
+    putchar('\n');
 
     srand(41);
 
@@ -116,23 +148,23 @@ int main(void) {
         }
     }
 
+    printf("Initial Case\n");
     for (row = 0; row < GRID_SIZE; row++) {
         for (col = 0; col < GRID_SIZE; col++) {
-            printf("%c",
-                   life[row][col]); // fix 1: changed %s to %c for char
+            putchar(life[row][col]); // fix 1: changed to putchar
         }
-        puts(" ");
+        putchar('\n');
     }
 
     while (count < GEN_LIMIT) { // changed limit to GEN_LIMIT generations
         transition(GRID_SIZE, life);
+        printf("\ngeneration: %d\n", count);
         for (row = 0; row < GRID_SIZE; row++) {
             for (col = 0; col < GRID_SIZE; col++) {
-                printf("%c", life[row][col]);
+                putchar(life[row][col]); // fix 1: changed to putchar
             }
-            puts(" ");
+            putchar('\n');
         }
-        printf("\ngeneration: %d\n", count);
         count++;
     }
 
