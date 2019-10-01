@@ -5,9 +5,9 @@
  * @author YOUR_NAME_HERE
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#include <stdlib.h>
 
 #include "parse.h"
 
@@ -23,13 +23,13 @@
  * @return a pointer to the new string
  */
 
-static char *duplicate( const char *str ) {
-    int len = sizeof( str );
-    char *buf = (char *) malloc( len + 1 );
+static char *duplicate(const char *str) {
+    int len = sizeof(str);
+    char *buf = (char *)malloc(len + 1);
 
-    strcpy( buf, str );
+    strcpy(buf, str);
 
-    return( buf );
+    return (buf);
 }
 
 /*
@@ -40,7 +40,7 @@ static char *duplicate( const char *str ) {
  * parse() - parse a comma-separated string of up to 'count' fields
  */
 
-int parse( char *str, char *fields[], size_t count ) {
+int parse(char *str, char *fields[], size_t count) {
     char *buf;
 
     // use our own string pointer
@@ -59,31 +59,31 @@ int parse( char *str, char *fields[], size_t count ) {
 
     char *start, *curr;
 
-    size_t field = 0;  // field being processed right now
+    size_t field = 0; // field being processed right now
 
     // iterate through the fields, dealing with each one in turn
 
     start = curr = buf;
 
-    while( field < count ) {
+    while (field < count) {
 
         // fields except for the last one end at a comma;
         // the last field ends at the end of the string,
         // or if a newline is encountered
 
-        while( *curr && *curr != ',' && *curr != '\n' ) {
+        while (*curr && *curr != ',' && *curr != '\n') {
             ++curr;
         }
 
-        char ch = *curr;  // remember the end character
+        char ch = *curr; // remember the end character
 
-        *curr++ = '\0';   // replace it with a NUL
+        *curr++ = '\0'; // replace it with a NUL
 
-        fields[field++] = duplicate(start);    // duplicate the field
+        fields[field++] = duplicate(start); // duplicate the field
 
-        start = curr;     // move on
+        start = curr; // move on
 
-        if( ch != ',' ) {  // found the end of the string?
+        if (ch != ',') { // found the end of the string?
             break;
         }
     }
@@ -91,6 +91,5 @@ int parse( char *str, char *fields[], size_t count ) {
     // all done - the index of the next available element
     // is the number of things already in the array
 
-    return( field );
-
+    return (field);
 }
