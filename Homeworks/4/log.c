@@ -386,6 +386,7 @@ void generate_report(void) {
 
             // now, iterate through the event list for this employee
 
+            putchar('\n');
             for (event = entry->first; event; event = event->next) {
 
                 putchar('\t');
