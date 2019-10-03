@@ -2,7 +2,7 @@
  * parse.c - parsing function for the log file report program
  *
  * @author A. N. Onymous
- * @author YOUR_NAME_HERE
+ * @author Seth Gower
  */
 
 #include <stdlib.h>
@@ -24,7 +24,7 @@
  */
 
 static char *duplicate(const char *str) {
-    int len = sizeof(str);
+    int len = strlen(str);
     char *buf = (char *)malloc(len + 1);
 
     strcpy(buf, str);
@@ -82,6 +82,7 @@ int parse(char *str, char *fields[], size_t count) {
         fields[field++] = duplicate(start); // duplicate the field
 
         start = curr; // move on
+        // TODO: Fix memory leak
 
         if (ch != ',') { // found the end of the string?
             break;
