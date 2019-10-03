@@ -49,20 +49,20 @@ CFLAGS = -ggdb -std=c99 -Wall -Wextra -pedantic
 ########## End of flags from header.mak
 
 
-CPP_FILES =	
+CPP_FILES =
 C_FILES =	emp.c log.c parse.c rpt.c
-PS_FILES =	
-S_FILES =	
+PS_FILES =
+S_FILES =
 H_FILES =	emp.h log.h parse.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	emp.o log.o parse.o 
+OBJFILES =	emp.o log.o parse.o
 
 #
 # Main targets
 #
 
-all:	rpt 
+all:	rpt
 
 rpt:	rpt.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o rpt rpt.o $(OBJFILES) $(CLIBFLAGS)
@@ -89,4 +89,14 @@ clean:
 	-/bin/rm -f $(OBJFILES) rpt.o core
 
 realclean:        clean
-	-/bin/rm -f rpt 
+	-/bin/rm -f rpt
+
+run: rpt
+	@./rpt people.txt < log1.txt
+
+mem: rpt
+	valgrind --tool=memcheck --leak-check=full ./rpt people.txt < log1.txt > \
+		/dev/null 2> mem.log
+	@cat mem.log
+
+meme: mem

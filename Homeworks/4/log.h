@@ -8,45 +8,41 @@
 #ifndef _LOG_H_
 #define _LOG_H_
 
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /*
 ** Logfile entry code values
 */
 
-#define LOG_ENTRY   0
-#define LOG_EXIT    1
+#define LOG_ENTRY 0
+#define LOG_EXIT 1
 #define LOG_BADCODE 2
 
-    // number of logfile codes
-#define LOG_NCODES  3
+// number of logfile codes
+#define LOG_NCODES 3
 
 /*
 ** Event record
 */
 
-typedef
-    struct record {
-        struct record *next;  // link to next entry for this employee
-        int date;      // date of this entry
-        int time;      // time of this entry
-        int loc;       // location of the event
-        uint8_t code;  // the event code
-    }
-        EventRecord;
+typedef struct record {
+    struct record *next; // link to next entry for this employee
+    int date;            // date of this entry
+    int time;            // time of this entry
+    int loc;             // location of the event
+    uint8_t code;        // the event code
+} EventRecord;
 
 /*
 ** Logfile entry data structure
 */
 
-typedef
-    struct logentry {
-        struct logentry *next;  // next logfile entry in the list
-        EventRecord *first;     // first event record for this employee
-        int id;                 // employee ID
-    }
-        LogEntry;
+typedef struct logentry {
+    struct logentry *next; // next logfile entry in the list
+    EventRecord *first;    // first event record for this employee
+    int id;                // employee ID
+} LogEntry;
 
 /*
 ** Global list of log file entires
@@ -66,7 +62,7 @@ extern int num_logentries;
  * @return newly allocated event record, or NULL on failure
  */
 
-EventRecord *new_event( int date, int time, int loc, uint8_t code );
+EventRecord *new_event(int date, int time, int loc, uint8_t code);
 
 /**
  * free_event() - deallocate an event node
@@ -74,7 +70,7 @@ EventRecord *new_event( int date, int time, int loc, uint8_t code );
  * @param  event    pointer to the node to deallocate
  */
 
-void free_event( EventRecord *event );
+void free_event(EventRecord *event);
 
 /**
  * new_logentry() - create a new logentry
@@ -84,7 +80,7 @@ void free_event( EventRecord *event );
  * @return newly allocated logentry record, or NULL on failure
  */
 
-LogEntry *new_logentry( int id );
+LogEntry *new_logentry(int id);
 
 /**
  * free_logentry() - deallocate a logentry node
@@ -92,7 +88,7 @@ LogEntry *new_logentry( int id );
  * @param  logentry    pointer to the node to deallocate
  */
 
-void free_logentry( LogEntry *logentry );
+void free_logentry(LogEntry *logentry);
 
 /**
  * find_logentry() - locate the entry for a specific employee id
@@ -102,7 +98,7 @@ void free_logentry( LogEntry *logentry );
  * @return a pointer to the LogEntry record, or NULL
  */
 
-LogEntry *find_logentry( int id );
+LogEntry *find_logentry(int id);
 
 /**
  * load_logfile() - load the logfile database
@@ -112,18 +108,18 @@ LogEntry *find_logentry( int id );
  * @return count of logfile records loaded, or 0 on error
  */
 
-int load_logfile( FILE *file );
+int load_logfile(FILE *file);
 
 /*
 ** generate_report() - produce the activity report
 */
 
-void generate_report( void );
+void generate_report(void);
 
 /*
 ** delete_all_logentries() - delete all logfile entries
 */
 
-void delete_all_logentries( void );
+void delete_all_logentries(void);
 
 #endif
