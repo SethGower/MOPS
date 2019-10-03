@@ -269,6 +269,8 @@ void delete_all_employees(void) {
 
     while (emp) {
         nextEmp = emp->next;
+        free(emp->first);
+        free(emp->last);
         free_emp(emp);
         emp = nextEmp;
     }
