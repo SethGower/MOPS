@@ -265,10 +265,11 @@ int load_employees(FILE *file) {
  */
 
 void delete_all_employees(void) {
-    Employee *emp = employees;
+    Employee *emp = employees, *nextEmp;
 
     while (emp) {
+        nextEmp = emp->next;
         free_emp(emp);
-        emp = emp->next;
+        emp = nextEmp;
     }
 }
