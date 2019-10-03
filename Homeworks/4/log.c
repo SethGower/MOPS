@@ -135,7 +135,9 @@ static Status add_logentry(int line, int id, int date, int time, int loc,
     erprev = NULL;
     ercurr = entry->first;
 
-    while (ercurr && ercurr->time <= event->time) {
+    while (ercurr &&
+           ((event->time >= ercurr->time && event->date == ercurr->date) ||
+            event->date > ercurr->date)) {
 
         erprev = ercurr;
         ercurr = ercurr->next;
