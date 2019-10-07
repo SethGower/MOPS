@@ -24,10 +24,9 @@
  * Error:
  *****************************************************************************/
 int createBracetopia(BracetopiaBoard *boardPtr, size_t size, double threshold) {
-    size_t i = 0;
     boardPtr->size = size;
     boardPtr->happiness = 0.0;
-    boardPtr->happThreshold = 0.0;
+    boardPtr->happThreshold = threshold;
     boardPtr->board = allocateBoard(size);
     return 0;
 }
@@ -148,7 +147,7 @@ int move(BracetopiaBoard *boardPtr) {
  * Error:            None
  *****************************************************************************/
 Cell **allocateBoard(int size) {
-    size_t i = 0;
+    int i = 0;
     Cell **board = malloc(sizeof(Cell *) * size);
 
     if (NULL == board) {
