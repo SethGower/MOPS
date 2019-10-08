@@ -7,6 +7,7 @@
  *****************************************************************************/
 
 #include "bracetopia.h"
+#include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,11 +25,14 @@
  * Return:
  * Error:
  *****************************************************************************/
-int createBracetopia(BracetopiaBoard *boardPtr, size_t size, double threshold) {
+int createBracetopia(BracetopiaBoard *boardPtr, size_t size, double threshold,
+                     double percVac, double percEnd) {
     boardPtr->size = size;
     boardPtr->happiness = 0.0;
     boardPtr->happThreshold = threshold;
     boardPtr->board = allocateBoard(size);
+    boardPtr->percVac = percVac;
+    boardPtr->percEnd = percEnd;
     return 0;
 }
 
@@ -49,7 +53,7 @@ void destroyBracetopia(BracetopiaBoard *boardPtr) {
 }
 
 double getCommunityHappiness(BracetopiaBoard *boardPtr) {
-    double total;
+    double total = 0, temp = 0;
     int num = 0;
     int i, j;
     Cell *currCell;
@@ -57,7 +61,8 @@ double getCommunityHappiness(BracetopiaBoard *boardPtr) {
         for (j = 0; j < boardPtr->size; j++) {
             currCell = &boardPtr->board[i][j];
             if (currCell->status) { // checks if not vacant
-                total += getCellHappiness(boardPtr, i, j);
+                temp = getCellHappiness(boardPtr, i, j);
+                total += temp;
                 num++;
             }
         }
@@ -86,7 +91,7 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y) {
         for (j = -1; j < 2; j++) {
             if (y + j < 0 || y + j >= boardPtr->size)
                 continue;
-            if (x == x + i && y == y + j)
+            if (0 == i && 0 == j)
                 continue;
             if (boardPtr->board[x + i][y + j].status) {
                 total_neighbors++;
@@ -97,8 +102,12 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y) {
             }
         }
     }
-    boardPtr->board[x][y].happiness = happiness =
-        (double)like_neighbors / (double)total_neighbors;
+    if (0 != total_neighbors) {
+        boardPtr->board[x][y].happiness = happiness =
+            (double)like_neighbors / (double)total_neighbors;
+    } else {
+        boardPtr->board[x][y].happiness = happiness = 1;
+    }
     return happiness;
 }
 
@@ -129,7 +138,8 @@ int move(BracetopiaBoard *boardPtr) {
                         if (newBoard[coord.x][coord.y].status)
                             coord.y++;
                         coord = findNextVacantSpace(boardPtr, coord.x, coord.y);
-                    } while (newBoard[coord.x][coord.y].status);
+                    } while (newBoard[coord.x][coord.y].status ||
+                             newBoard[coord.x][coord.y].status);
                     memcpy(&newBoard[coord.x][coord.y], currCell, sizeof(Cell));
 
                 } else {
@@ -139,7 +149,8 @@ int move(BracetopiaBoard *boardPtr) {
         }
     }
 
-    free(boardPtr->board);
+    // destroy old board stuff
+    destroyBracetopia(boardPtr);
     boardPtr->board = newBoard;
     boardPtr->happiness = getCommunityHappiness(boardPtr);
 
@@ -213,7 +224,8 @@ coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y) {
  * Error:            None
  *****************************************************************************/
 void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
-    int totalAgents = (boardPtr->size * boardPtr->size) * (1 - percVac);
+    int numVac = (boardPtr->size * boardPtr->size) * percVac;
+    int totalAgents = (boardPtr->size * boardPtr->size) - numVac;
     int endLine = totalAgents * percEndl;
 
     int curr = 0;
@@ -226,9 +238,9 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
 
     /* populates the grid with unshuffled agents */
     for (i = 0; i < boardPtr->size; i++) {
-        if (curr >= totalAgents)
-            break;
         for (j = 0; j < boardPtr->size; j++) {
+            if (curr >= totalAgents)
+                break;
             if (curr < endLine) {
                 boardPtr->board[i][j].status = ENDLINE;
             } else {
@@ -237,6 +249,7 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
             curr++;
         }
     }
+    /* printGrid(boardPtr, 0, 0); */
     /* shuffles the board */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
@@ -259,9 +272,9 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
  * Return:           None
  * Error:            None
  *****************************************************************************/
-void printGrid(BracetopiaBoard *boardPtr) {
+void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
     int i, j;
-    printf("Grid:\n");
+    int *populations = calloc(3, sizeof(int));
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
             switch (boardPtr->board[i][j].status) {
@@ -278,5 +291,29 @@ void printGrid(BracetopiaBoard *boardPtr) {
             }
         }
         putchar('\n');
+    }
+    printf("cycle: %d\n", currCycle);
+    printf("moves this cycle: %d\n", movesCycle);
+    printf("teams' \"happiness\": %f\n", boardPtr->happiness);
+    printf("dim: %d, %%strength of preference: %d%%, %%vacancy: %d%%, %%end: "
+           "%d%%\n",
+           boardPtr->size, (int)(boardPtr->happThreshold * 100),
+           (int)(boardPtr->percVac * 100), (int)(boardPtr->percEnd * 100));
+    printf("Use Control-C to quit.\n");
+
+    printf("Population Counts:\n");
+    populationCount(boardPtr, populations);
+    printf("Vacant: %d, Endline: %d, Newline: %d\n", populations[0],
+           populations[2], populations[1]);
+    free(populations);
+}
+
+void populationCount(BracetopiaBoard *boardPtr, int *populations) {
+
+    int i, j;
+    for (i = 0; i < boardPtr->size; i++) {
+        for (j = 0; j < boardPtr->size; j++) {
+            populations[boardPtr->board[i][j].status]++;
+        }
     }
 }
