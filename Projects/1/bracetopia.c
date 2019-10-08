@@ -50,19 +50,19 @@ void destroyBracetopia(BracetopiaBoard *boardPtr) {
 
 double getCommunityHappiness(BracetopiaBoard *boardPtr) {
     double total;
-    int num;
+    int num = 0;
     int i, j;
-    Cell curr_cell;
+    Cell *currCell;
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
-            curr_cell = boardPtr->board[i][j];
-            if (!curr_cell.status) { // checks if not vacant
+            currCell = &boardPtr->board[i][j];
+            if (currCell->status) { // checks if not vacant
                 total += getCellHappiness(boardPtr, i, j);
                 num++;
             }
         }
     }
-    return total / num;
+    return total / (double)num;
 }
 
 /******************************************************************************
@@ -86,7 +86,9 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y) {
         for (j = -1; j < 2; j++) {
             if (y + j < 0 || y + j >= boardPtr->size)
                 continue;
-            if (!boardPtr->board[x + i][y + j].status) {
+            if (x == x + i && y == y + j)
+                continue;
+            if (boardPtr->board[x + i][y + j].status) {
                 total_neighbors++;
                 if (boardPtr->board[x][y].status ==
                     boardPtr->board[x + i][y + j].status) {
@@ -96,7 +98,7 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y) {
         }
     }
     boardPtr->board[x][y].happiness = happiness =
-        like_neighbors / total_neighbors;
+        (double)like_neighbors / (double)total_neighbors;
     return happiness;
 }
 
@@ -118,15 +120,21 @@ int move(BracetopiaBoard *boardPtr) {
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
             currCell = &boardPtr->board[i][j];
-            if (currCell->happiness < boardPtr->happThreshold) {
-                movedAgents++;
-                do {
-                    coord = findNextVacantSpace(boardPtr, i, j);
-                } while (newBoard[coord.x][coord.y].status);
-                memcpy(&newBoard[coord.x][coord.y], currCell, sizeof(Cell));
+            if (currCell->status) {
+                if (currCell->happiness < boardPtr->happThreshold) {
+                    movedAgents++;
+                    coord.x = i;
+                    coord.y = j;
+                    do {
+                        if (newBoard[coord.x][coord.y].status)
+                            coord.y++;
+                        coord = findNextVacantSpace(boardPtr, coord.x, coord.y);
+                    } while (newBoard[coord.x][coord.y].status);
+                    memcpy(&newBoard[coord.x][coord.y], currCell, sizeof(Cell));
 
-            } else {
-                memcpy(&newBoard[i][j], currCell, sizeof(Cell));
+                } else {
+                    memcpy(&newBoard[i][j], currCell, sizeof(Cell));
+                }
             }
         }
     }
@@ -175,13 +183,17 @@ Cell **allocateBoard(int size) {
 coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y) {
     coordinate coord = {x, y};
 
-    for (; coord.x < boardPtr->size; coord.x++) {
-        for (; coord.y < boardPtr->size; coord.y++) {
-            if (boardPtr->board[coord.x][coord.y].status) // checks if not
-                                                          // vacant
+    int i, j;
+    for (i = x; i < boardPtr->size; i++) {
+        for (j = y; j < boardPtr->size; j++) {
+            if (boardPtr->board[i][j].status) // checks if not
+                                              // vacant
                 continue;
-            else
+            else {
+                coord.x = i;
+                coord.y = j;
                 return coord;
+            }
         }
     }
     return coord;
@@ -236,7 +248,7 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
             boardPtr->board[x][y] = currCell;
         }
     }
-    getCommunityHappiness(boardPtr);
+    boardPtr->happiness = getCommunityHappiness(boardPtr);
 }
 
 /******************************************************************************
