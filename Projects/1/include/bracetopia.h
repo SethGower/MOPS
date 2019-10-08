@@ -38,4 +38,6 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y);
 int move(BracetopiaBoard *boardPtr);
 Cell **allocateBoard(int size);
 coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y);
+void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl);
+void printGrid(BracetopiaBoard *boardPtr);
 #endif

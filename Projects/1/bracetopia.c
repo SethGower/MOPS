@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /******************************************************************************
  * Function:         createBracetopia
@@ -184,4 +185,86 @@ coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y) {
         }
     }
     return coord;
+}
+
+/******************************************************************************
+ * Function:         void populateBoard
+ *                   Populate the board with random assortment of agents
+ * Where:
+ *                   BracetopiaBoard *boardPtr - Pointer to board
+ *                   double percVac - percent of board that should
+ *                      remain vacant
+ *                   double percEndl - percent of agents that should be
+ *                      endline agents. Newline will be
+ *                      1-percentVacant-percentEndline
+ * Return:           None
+ * Error:            None
+ *****************************************************************************/
+void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
+    int totalAgents = (boardPtr->size * boardPtr->size) * (1 - percVac);
+    int endLine = totalAgents * percEndl;
+
+    int curr = 0;
+    int i, j;
+    int x, y;
+
+    Cell currCell;
+
+    srand(41);
+
+    /* populates the grid with unshuffled agents */
+    for (i = 0; i < boardPtr->size; i++) {
+        if (curr >= totalAgents)
+            break;
+        for (j = 0; j < boardPtr->size; j++) {
+            if (curr < endLine) {
+                boardPtr->board[i][j].status = ENDLINE;
+            } else {
+                boardPtr->board[i][j].status = NEWLINE;
+            }
+            curr++;
+        }
+    }
+    /* shuffles the board */
+    for (i = 0; i < boardPtr->size; i++) {
+        for (j = 0; j < boardPtr->size; j++) {
+            x = rand() % boardPtr->size;
+            y = rand() % boardPtr->size;
+
+            currCell = boardPtr->board[i][j];
+            boardPtr->board[i][j] = boardPtr->board[x][y];
+            boardPtr->board[x][y] = currCell;
+        }
+    }
+    getCommunityHappiness(boardPtr);
+}
+
+/******************************************************************************
+ * Function:         void printGrid
+ *                   Prints the grid in boardPtr to stdout
+ * Where:
+ *                   BracetopiaBoard *boardPtr - Board in questsion
+ * Return:           None
+ * Error:            None
+ *****************************************************************************/
+void printGrid(BracetopiaBoard *boardPtr) {
+    int i, j;
+    printf("Grid:\n");
+    for (i = 0; i < boardPtr->size; i++) {
+        for (j = 0; j < boardPtr->size; j++) {
+            switch (boardPtr->board[i][j].status) {
+            case ENDLINE:
+                putchar('e');
+                break;
+            case NEWLINE:
+                putchar('n');
+                break;
+
+            default:
+                putchar('.');
+                break;
+            }
+        }
+        putchar('\n');
+    }
 }
