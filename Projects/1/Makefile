@@ -28,7 +28,7 @@ $(OUTPUT): $(OBJECTS)
 
 
 # clean: remove all object files and output, use -f option.
-.PHONY: clean run help
+.PHONY: clean run help gdb
 clean:
 	rm -f $(OBJECT_DIR)/*.o $(OUTPUT)
 
@@ -38,6 +38,9 @@ mem: all
 
 run: all
 	$(OUTPUT)
+
+gdb: all
+	gdb $(OUTPUT)
 
 # help: list available make options
 help:

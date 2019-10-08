@@ -10,11 +10,14 @@ int main(int argc, char *argv[]) {
     if (!(argv[0] && argc)) {
         printf("fuck\n");
     }
-    createBracetopia(&board, 10, 0.7);
+    createBracetopia(&board, 10, 0.5);
 
-    for (int i = 0; i < board.size; i++) {
-        printf("%p\n", (void *)board.board[i]);
-    }
+    populateBoard(&board, 0.4, 0.6);
+    printGrid(&board);
+    printf("%f\n", board.happiness);
+    move(&board);
+    printGrid(&board);
+    printf("%f\n", board.happiness);
 
     destroyBracetopia(&board);
     return 0;
