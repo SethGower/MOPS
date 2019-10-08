@@ -134,15 +134,18 @@ int move(BracetopiaBoard *boardPtr) {
                     movedAgents++;
                     coord.x = i;
                     coord.y = j;
+                    /* find the next open spot, that is vacant in old and new */
                     do {
                         if (newBoard[coord.x][coord.y].status)
                             coord.y++;
                         coord = findNextVacantSpace(boardPtr, coord.x, coord.y);
                     } while (newBoard[coord.x][coord.y].status ||
                              newBoard[coord.x][coord.y].status);
+                    /* copy it to the new coordinate */
                     memcpy(&newBoard[coord.x][coord.y], currCell, sizeof(Cell));
 
                 } else {
+                    /* if happy, then just copy to same spot in new */
                     memcpy(&newBoard[i][j], currCell, sizeof(Cell));
                 }
             }
