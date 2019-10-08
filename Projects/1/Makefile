@@ -13,7 +13,7 @@ OUTPUT = $(OUTPUT_DIR)/Bracetopia
 
 
 # object files
-_OBJECTS = bracetopia.o driver.o
+_OBJECTS = bracetopia.o driver.o display.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.
@@ -34,7 +34,7 @@ clean:
 
 # run valgrind to check for any issues
 mem: all
-	valgrind ./$(OUTPUT)
+	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) -c 5 > /dev/null
 
 run: all
 	$(OUTPUT)
