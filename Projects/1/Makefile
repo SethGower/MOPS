@@ -16,8 +16,11 @@ OUTPUT = $(OUTPUT_DIR)/Bracetopia
 _OBJECTS = bracetopia.o driver.o display.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
+_HEADERS = bracetopia.h DebugMacros.h display.h
+HEADERS = $(patsubst %,$(INCLUDE_DIR)/%,$(_HEADERS))
+
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.
-$(OBJECT_DIR)/%.o: %.c
+$(OBJECT_DIR)/%.o: %.c $(HEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # all: Generate output, using compiled .obj files
