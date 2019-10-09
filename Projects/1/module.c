@@ -52,6 +52,15 @@ void destroyBracetopia(BracetopiaBoard *boardPtr) {
     free(boardPtr->board);
 }
 
+/******************************************************************************
+ * Function:         double getCommunityHappiness
+ * Description:      Calculates the average happiness fo community and updates
+ *                   individual cell happiness
+ * Where:
+ *                   BracetopiaBoard *boardPtr - TODO
+ * Return:           double - average happiness
+ * Error:            None
+ *****************************************************************************/
 double getCommunityHappiness(BracetopiaBoard *boardPtr) {
     double total = 0, temp = 0;
     int num = 0;
@@ -133,19 +142,17 @@ int move(BracetopiaBoard *boardPtr) {
                 if (currCell->happiness < boardPtr->happThreshold) {
                     movedAgents++;
                     /* find the next open spot, that is vacant in old and new */
-                    coord = findNextVacantSpace(boardPtr, newBoard, i, j);
+                    coord = findNextVacantSpace(boardPtr, newBoard);
 
                     /* copy it to the new coordinate */
                     if (coord.x != -1 && coord.y != -1) {
-                        memcpy(&newBoard[coord.x][coord.y], currCell,
-                               sizeof(Cell));
+                        newBoard[coord.x][coord.y] = *currCell;
                     } else {
-                        memcpy(&newBoard[i][j], currCell, sizeof(Cell));
+                        newBoard[i][j] = *currCell;
                     }
 
                 } else {
-                    /* if happy, then just copy to same spot in new */
-                    memcpy(&newBoard[i][j], currCell, sizeof(Cell));
+                    newBoard[i][j] = *currCell;
                 }
             }
         }
@@ -175,10 +182,13 @@ Cell **allocateBoard(int size) {
     if (NULL == board) {
         fprintf(stderr, "Error while allocating board in %s:%d\n", __FILE__,
                 __LINE__);
-        return board; // prevent access of NULL pointer
-    }
-    for (i = 0; i < size; i++) {
-        board[i] = calloc(size, sizeof(Cell)); // makes them all vacant
+    } else {
+        for (i = 0; i < size; i++) {
+            board[i] = calloc(size, sizeof(Cell)); // makes them all vacant
+            if (NULL == board[i]) {
+                fprintf(stderr, "Error while allocating row\n");
+            }
+        }
     }
     return board;
 }
@@ -193,8 +203,7 @@ Cell **allocateBoard(int size) {
  * Return:           coordinate, the next available spot
  * Error:            None
  *****************************************************************************/
-coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard,
-                               int x, int y) {
+coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard) {
     coordinate coord = {0, 0};
     int i, j;
     for (i = 0; i < boardPtr->size; i++) {
@@ -311,8 +320,16 @@ void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
     /* free(populations); */
 }
 
+/******************************************************************************
+ * Function:         void populationCount
+ *                   Function to perform a census. Used for debugging
+ * Where:
+ *                   BracetopiaBoard *boardPtr - TODO
+ *                   int *populations - TODO
+ * Return:           void
+ * Error:            none
+ *****************************************************************************/
 void populationCount(BracetopiaBoard *boardPtr, int *populations) {
-
     int i, j;
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {

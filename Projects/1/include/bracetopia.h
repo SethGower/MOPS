@@ -8,9 +8,8 @@
 
 #ifndef _BRACETOPIA_H
 #define _BRACETOPIA_H
-#include <stdlib.h>
-
 #define _DEFAULT_SOURCE
+#include <stdlib.h>
 
 typedef enum { VACANT = 0, NEWLINE = 1, ENDLINE = 2 } alignment;
 
@@ -39,8 +38,7 @@ double getCommunityHappiness(BracetopiaBoard *boardPtr);
 double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y);
 int move(BracetopiaBoard *boardPtr);
 Cell **allocateBoard(int size);
-coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard,
-                               int x, int y);
+coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard);
 void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl);
 void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle);
 void populationCount(BracetopiaBoard *boardPtr, int *populations);

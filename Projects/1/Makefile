@@ -13,7 +13,7 @@ OUTPUT = $(OUTPUT_DIR)/Bracetopia
 
 
 # object files
-_OBJECTS = bracetopia.o driver.o display.o
+_OBJECTS = module.o brace-topia.o display.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
 _HEADERS = bracetopia.h DebugMacros.h display.h
