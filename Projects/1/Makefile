@@ -9,7 +9,7 @@ CFLAGS=-I$(INCLUDE_DIR) -std=c99 -pedantic -Wall -Wextra -g
 LIBS=-lm
 
 # output
-OUTPUT = $(OUTPUT_DIR)/Bracetopia
+OUTPUT = $(OUTPUT_DIR)/brace-topia
 
 
 # object files
