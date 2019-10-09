@@ -41,5 +41,5 @@ Cell **allocateBoard(int size);
 coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard);
 void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl);
 void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle);
-void populationCount(BracetopiaBoard *boardPtr, int *populations);
+void census(BracetopiaBoard *boardPtr, int *populations);
 #endif

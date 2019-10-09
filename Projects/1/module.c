@@ -21,6 +21,8 @@
  *                   BracetopiaBoard *boardPtr - pointer to board
  *                   size_t size - square size of the board
  *                   double threshold - happiness threshold for program
+ *                   double percVac - percentage of vacant spots in board
+ *                   double percEnd - percentage of endline agents in board
  *                    -
  * Return:
  * Error:
@@ -57,7 +59,7 @@ void destroyBracetopia(BracetopiaBoard *boardPtr) {
  * Description:      Calculates the average happiness fo community and updates
  *                   individual cell happiness
  * Where:
- *                   BracetopiaBoard *boardPtr - TODO
+ *                   BracetopiaBoard *boardPtr - pointer to the board struct
  * Return:           double - average happiness
  * Error:            None
  *****************************************************************************/
@@ -84,8 +86,8 @@ double getCommunityHappiness(BracetopiaBoard *boardPtr) {
  *                   Calculate the happiness value of the cell given by (x,y)
  * Where:
  *                   BracetopiaBoard *boardPtr - Pointer to board
- *                   size_t x - horizontal coordinate of cell in questsion
- *                   size_t y - vertical coordinate of cell in question
+ *                   int x - horizontal coordinate of cell in questsion
+ *                   int y - vertical coordinate of cell in question
  * Return:           float happiness: happiness value
  * Error:            None
  *****************************************************************************/
@@ -121,7 +123,7 @@ double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y) {
 }
 
 /******************************************************************************
- * Function:         void move
+ * Function:         int move
  *                   Moves the cels between cycles
  * Where:
  *                   BracetopiaBoard *boardPtr - Pointer to board
@@ -135,23 +137,32 @@ int move(BracetopiaBoard *boardPtr) {
     int i, j;
     int movedAgents = 0;
 
+    /* Iterate through every cell in board */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
+            /* current cell being worked with */
             currCell = &boardPtr->board[i][j];
+            /* Since alignment is an enum that vacant is 0, using it in a
+             * conditional is fine. This checks if not vacant */
             if (currCell->status) {
+                /* check if unhappy */
                 if (currCell->happiness < boardPtr->happThreshold) {
-                    movedAgents++;
                     /* find the next open spot, that is vacant in old and new */
                     coord = findNextVacantSpace(boardPtr, newBoard);
 
                     /* copy it to the new coordinate */
+                    /* If the coord is (-1,-1) then a spot was unable to be
+                     * found, and the cell will simply be moved to its current
+                     * position, even though it is unhappy*/
                     if (coord.x != -1 && coord.y != -1) {
+                        movedAgents++;
                         newBoard[coord.x][coord.y] = *currCell;
                     } else {
                         newBoard[i][j] = *currCell;
                     }
 
                 } else {
+                    /* if it isn't unhappy, just move it to same spot */
                     newBoard[i][j] = *currCell;
                 }
             }
@@ -159,10 +170,13 @@ int move(BracetopiaBoard *boardPtr) {
     }
 
     // destroy old board stuff
-    destroyBracetopia(boardPtr);
-    boardPtr->board = newBoard;
+    destroyBracetopia(boardPtr); /* free the old board */
+    boardPtr->board = newBoard;  /* set the newBoard to the current board */
+    /* update the happiness. This also updates all of the cells' happiness
+     * values */
     boardPtr->happiness = getCommunityHappiness(boardPtr);
 
+    /* return the number of moves this cycle. */
     return movedAgents;
 }
 
@@ -179,14 +193,19 @@ Cell **allocateBoard(int size) {
     int i = 0;
     Cell **board = malloc(sizeof(Cell *) * size);
 
+    /* check if malloc failed */
     if (NULL == board) {
         fprintf(stderr, "Error while allocating board in %s:%d\n", __FILE__,
                 __LINE__);
     } else {
+        /* iterate through whole board and allocate each row of cells */
         for (i = 0; i < size; i++) {
+            /* I used calloc, that way it Initializes everything to vacant.
+             * Since occupancy is given by an enum, and 0 == vacant */
             board[i] = calloc(size, sizeof(Cell)); // makes them all vacant
+            /* check if calloc failed */
             if (NULL == board[i]) {
-                fprintf(stderr, "Error while allocating row\n");
+                fprintf(stderr, "Error while allocating row: %d\n", i);
             }
         }
     }
@@ -195,19 +214,21 @@ Cell **allocateBoard(int size) {
 
 /******************************************************************************
  * Function:         coordinate findNextVacantSpace
- *                   Returns the next vacant spot in the grid
+ *                   Performs all of the logic for finding the next available
+ *                   space.
  * Where:
  *                   BracetopiaBoard *boardPtr - board in qustsion
- *                   int x - starting x coordinate
- *                   int y - starting y coordinate
+                     Cell **newBoard - the new board that is being created
  * Return:           coordinate, the next available spot
- * Error:            None
+ * Error:            If no cell was eligible, then returns (-1,-1)
  *****************************************************************************/
 coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard) {
     coordinate coord = {0, 0};
     int i, j;
+    /* iterates through entire board */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
+            /* if the space is vacant on both the old and new board */
             if (!(boardPtr->board[i][j].status || newBoard[i][j].status)) {
                 coord.x = i;
                 coord.y = j;
@@ -286,9 +307,9 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
  *****************************************************************************/
 void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
     int i, j;
-    /* int *populations = calloc(3, sizeof(int)); */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
+            /* Based on the status of the cell. Print certain char */
             switch (boardPtr->board[i][j].status) {
             case ENDLINE:
                 putchar('e');
@@ -302,8 +323,10 @@ void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
                 break;
             }
         }
+        /* Put newline after row is done */
         putchar('\n');
     }
+    /* print info */
     printf("cycle: %d\n", currCycle);
     printf("moves this cycle: %d\n", movesCycle);
     printf("teams' \"happiness\": %f\n", boardPtr->happiness);
@@ -313,26 +336,32 @@ void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
            (int)(boardPtr->percVac * 100), (int)(boardPtr->percEnd * 100));
     printf("Use Control-C to quit.\n");
 
-    /* printf("Population Counts:\n"); */
-    /* populationCount(boardPtr, populations); */
-    /* printf("Vacant: %d, Endline: %d, Newline: %d\n", populations[0], */
-    /*        populations[2], populations[1]); */
-    /* free(populations); */
+    /* If compiled in debug mode, print debug output */
+#ifdef DEBUG
+    int *populations = calloc(3, sizeof(int));
+    printf("Census Data:\n");
+    census(boardPtr, populations);
+    printf("Vacant: %d, Endline: %d, Newline: %d\n", populations[0],
+           populations[2], populations[1]);
+    free(populations);
+#endif
 }
 
 /******************************************************************************
- * Function:         void populationCount
+ * Function:         void census
  *                   Function to perform a census. Used for debugging
  * Where:
- *                   BracetopiaBoard *boardPtr - TODO
- *                   int *populations - TODO
+ *                   BracetopiaBoard *boardPtr - pointer to board
+ *                   int *populations - array to store populations in
  * Return:           void
  * Error:            none
  *****************************************************************************/
-void populationCount(BracetopiaBoard *boardPtr, int *populations) {
+void census(BracetopiaBoard *boardPtr, int *populations) {
     int i, j;
+    /* iterate through board */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
+            /* stores it based on the status enum value */
             populations[boardPtr->board[i][j].status]++;
         }
     }
