@@ -34,7 +34,8 @@ int main(int argc, char *argv[]) {
                     "brace-topia [-h] [-t N] [-c N] [-d dim] [-s %%str] [-v "
                     "%%vac] [-e %%end]\n");
             fprintf(stderr, "Option      Default   Example   Description\n");
-            printf(
+            fprintf(
+                stderr,
                 "'-h'        NA        -h        print this usage message.\n");
             fprintf(stderr,
                     "'-t N'      900000    -t 5000   microseconds cycle "
