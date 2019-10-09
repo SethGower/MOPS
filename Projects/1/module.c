@@ -6,6 +6,7 @@
  * Description:      Module for Bracetopia for Project 1 for CSCI-243
  *****************************************************************************/
 
+#include "ClassErrors.h"
 #include "bracetopia.h"
 #include <math.h>
 #include <stdint.h>
@@ -29,12 +30,19 @@
  *****************************************************************************/
 int createBracetopia(BracetopiaBoard *boardPtr, size_t size, double threshold,
                      double percVac, double percEnd) {
-    boardPtr->size = size;
-    boardPtr->happiness = 0.0;
-    boardPtr->happThreshold = threshold;
     boardPtr->board = allocateBoard(size);
-    boardPtr->percVac = percVac;
-    boardPtr->percEnd = percEnd;
+    if (NULL != boardPtr->board) {
+        boardPtr->size = size;
+        boardPtr->happiness = 0.0;
+        boardPtr->happThreshold = threshold;
+        boardPtr->percVac = percVac;
+        boardPtr->percEnd = percEnd;
+        return 0;
+    } else {
+        fprintf(stderr, "Error allocating board. At %s:%d\n", __FILE__,
+                __LINE__);
+        return MALLOC_ERROR;
+    }
     return 0;
 }
 
