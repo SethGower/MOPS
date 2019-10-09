@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     int returnCode = 0;
     char *getoptOptions = "ht:c:d:s:v:e:";
     int opt;
+    int tempInt = 0; /* temp variable to convert to float */
     mode opMode = CURSOR;
     /* getopt stuff */
     while ((opt = getopt(argc, argv, getoptOptions)) != -1) {
@@ -56,28 +57,100 @@ int main(int argc, char *argv[]) {
         case 't':
             /* changes the string of the argument to delay uS */
             delay = (int)strtol(optarg, NULL, 10);
+            if (delay < 1) {
+                delay = 900000;
+            }
             break;
         case 'c':
             /* changes string argument to max num of cycles */
             maxCycles = (int)strtol(optarg, NULL, 10);
             opMode = PRINT;
+            if (maxCycles < 0) {
+                fprintf(stderr, "count (%d) must be an non-negative integer\n",
+                        maxCycles);
+                fprintf(stderr, "usage:\n");
+                fprintf(stderr,
+                        "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                        "%%str] [-v %%vac] [-e %%end]\n",
+                        argv[0]);
+                return 2;
+            }
             break;
         case 'd':
             /* the dimension of the square grid */
             dim = (int)strtol(optarg, NULL, 10);
+            if (dim < 5 || dim > 39) {
+                fprintf(stderr, "dimension (%d) must be a value in [5...39]\n",
+                        dim);
+                fprintf(stderr, "usage:\n");
+                fprintf(stderr,
+                        "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                        "%%str] [-v %%vac] [-e %%end]\n",
+                        argv[0]);
+                return 2;
+            }
             break;
         case 's':
             /* strength of preference, aka threshold */
-            threshold = strtod(optarg, NULL) / 100.0;
+            tempInt = strtol(optarg, NULL, 10);
+
+            if (tempInt < 1 || tempInt > 99) {
+                fprintf(
+                    stderr,
+                    "preference strength (%d) must be a value in [1...99]\n",
+                    tempInt);
+                fprintf(stderr,
+                        "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                        "%%str] [-v %%vac] [-e %%end]\n",
+                        argv[0]);
+                return 2;
+            }
+            threshold = (double)tempInt / 100.0;
             break;
         case 'v':
             /* percent vacancy */
-            percVac = strtod(optarg, NULL) / 100.0;
+            tempInt = strtol(optarg, NULL, 10);
+            if (tempInt < 1 || tempInt > 99) {
+                fprintf(stderr, "vacancy (%d) must be a value in [1...99]\n",
+                        tempInt);
+                fprintf(stderr,
+                        "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                        "%%str] [-v %%vac] [-e %%end]\n",
+                        argv[0]);
+                return 2;
+            }
+            percVac = (double)tempInt / 100.0;
             break;
         case 'e':
             /* percent of total agents that are end line characters */
-            percEnd = strtod(optarg, NULL) / 100.0;
+            tempInt = strtol(optarg, NULL, 10);
+            if (tempInt < 1 || tempInt > 99) {
+                fprintf(stderr,
+                        "endline proportion (%d) must be a value in [1...99]\n",
+                        tempInt);
+                fprintf(stderr,
+                        "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                        "%%str] [-v %%vac] [-e %%end]\n",
+                        argv[0]);
+                return 2;
+            }
+            percEnd = (double)tempInt / 100.0;
             break;
+        case '?':
+            /* fprintf(stderr, "brace-topia: invalid option -- %c\n",
+             * (char)opt); */
+            fprintf(stderr, "usage:\n");
+            fprintf(stderr,
+                    "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                    "%%str] [-v %%vac] [-e %%end]\n",
+                    argv[0]);
+            return 1;
+        default:
+            fprintf(stderr, "usage:\n");
+            fprintf(stderr,
+                    "%s [-h] [-t N] [-c N] [-d dim] [-s "
+                    "%%str] [-v %%vac] [-e %%end]\n",
+                    argv[0]);
         }
     }
 
