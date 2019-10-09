@@ -22,9 +22,12 @@ int main(int argc, char *argv[]) {
     char *getoptOptions = "ht:c:d:s:v:e:";
     int opt;
     mode opMode = CURSOR;
+    /* getopt stuff */
     while ((opt = getopt(argc, argv, getoptOptions)) != -1) {
         switch (opt) {
         case 'h':
+            /* the ugly print out for help */
+            /* Looks good when printed. Not so good in source code */
             fprintf(stderr, "usage:\n");
             fprintf(stderr,
                     "brace-topia [-h] [-t N] [-c N] [-d dim] [-s %%str] [-v "
@@ -51,45 +54,58 @@ int main(int argc, char *argv[]) {
                     "Others want Newline.\n");
             return 0;
         case 't':
+            /* changes the string of the argument to delay uS */
             delay = (int)strtol(optarg, NULL, 10);
             break;
         case 'c':
+            /* changes string argument to max num of cycles */
             maxCycles = (int)strtol(optarg, NULL, 10);
             opMode = PRINT;
             break;
         case 'd':
+            /* the dimension of the square grid */
             dim = (int)strtol(optarg, NULL, 10);
             break;
         case 's':
+            /* strength of preference, aka threshold */
             threshold = strtod(optarg, NULL) / 100.0;
             break;
         case 'v':
+            /* percent vacancy */
             percVac = strtod(optarg, NULL) / 100.0;
             break;
         case 'e':
+            /* percent of total agents that are end line characters */
             percEnd = strtod(optarg, NULL) / 100.0;
             break;
         }
     }
 
     returnCode = createBracetopia(&board, dim, threshold, percVac, percEnd);
-    populateBoard(&board, percVac, percEnd);
-
-    if (opMode == PRINT) {
-        for (currCycle = 0; currCycle <= maxCycles; currCycle++) {
-            printGrid(&board, currCycle, movesCycle);
-            movesCycle = move(&board);
-        }
+    if (returnCode) {
+        fprintf(stderr, "Game creation failed. Exiting\n");
     } else {
-        while (true) {
-            clear();
-            set_cur_pos(0, 0);
-            printGrid(&board, currCycle++, movesCycle);
-            movesCycle = move(&board);
-            usleep(delay);
+        populateBoard(&board, percVac, percEnd);
+
+        /* check which mode to run in. This is decided if the user passed in a
+         * cycle max. If so, then it defaults to print mode */
+        if (opMode == PRINT) {
+            for (currCycle = 0; currCycle <= maxCycles; currCycle++) {
+                printGrid(&board, currCycle, movesCycle);
+                movesCycle = move(&board);
+            }
+        } else {
+            /* enable cursor control */
+            while (true) {
+                clear();
+                set_cur_pos(0, 0);
+                printGrid(&board, currCycle++, movesCycle);
+                movesCycle = move(&board);
+                usleep(delay);
+            }
         }
     }
-
     destroyBracetopia(&board);
+
     return returnCode;
 }
