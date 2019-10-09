@@ -132,17 +132,16 @@ int move(BracetopiaBoard *boardPtr) {
             if (currCell->status) {
                 if (currCell->happiness < boardPtr->happThreshold) {
                     movedAgents++;
-                    coord.x = i;
-                    coord.y = j;
                     /* find the next open spot, that is vacant in old and new */
-                    do {
-                        if (newBoard[coord.x][coord.y].status)
-                            coord.y++;
-                        coord = findNextVacantSpace(boardPtr, coord.x, coord.y);
-                    } while (newBoard[coord.x][coord.y].status ||
-                             newBoard[coord.x][coord.y].status);
+                    coord = findNextVacantSpace(boardPtr, newBoard, i, j);
+
                     /* copy it to the new coordinate */
-                    memcpy(&newBoard[coord.x][coord.y], currCell, sizeof(Cell));
+                    if (coord.x != -1 && coord.y != -1) {
+                        memcpy(&newBoard[coord.x][coord.y], currCell,
+                               sizeof(Cell));
+                    } else {
+                        memcpy(&newBoard[i][j], currCell, sizeof(Cell));
+                    }
 
                 } else {
                     /* if happy, then just copy to same spot in new */
@@ -194,22 +193,23 @@ Cell **allocateBoard(int size) {
  * Return:           coordinate, the next available spot
  * Error:            None
  *****************************************************************************/
-coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y) {
-    coordinate coord = {x, y};
-
+coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard,
+                               int x, int y) {
+    coordinate coord = {0, 0};
     int i, j;
-    for (i = x; i < boardPtr->size; i++) {
-        for (j = y; j < boardPtr->size; j++) {
-            if (boardPtr->board[i][j].status) // checks if not
-                                              // vacant
-                continue;
-            else {
+    for (i = 0; i < boardPtr->size; i++) {
+        for (j = 0; j < boardPtr->size; j++) {
+            if (!(boardPtr->board[i][j].status || newBoard[i][j].status)) {
                 coord.x = i;
                 coord.y = j;
                 return coord;
             }
         }
     }
+    /* if it has reached this point. Then no eligible spaces have been found */
+    coord.x = -1;
+    coord.y = -1;
+
     return coord;
 }
 
@@ -277,7 +277,7 @@ void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl) {
  *****************************************************************************/
 void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
     int i, j;
-    int *populations = calloc(3, sizeof(int));
+    /* int *populations = calloc(3, sizeof(int)); */
     for (i = 0; i < boardPtr->size; i++) {
         for (j = 0; j < boardPtr->size; j++) {
             switch (boardPtr->board[i][j].status) {
@@ -304,11 +304,11 @@ void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle) {
            (int)(boardPtr->percVac * 100), (int)(boardPtr->percEnd * 100));
     printf("Use Control-C to quit.\n");
 
-    printf("Population Counts:\n");
-    populationCount(boardPtr, populations);
-    printf("Vacant: %d, Endline: %d, Newline: %d\n", populations[0],
-           populations[2], populations[1]);
-    free(populations);
+    /* printf("Population Counts:\n"); */
+    /* populationCount(boardPtr, populations); */
+    /* printf("Vacant: %d, Endline: %d, Newline: %d\n", populations[0], */
+    /*        populations[2], populations[1]); */
+    /* free(populations); */
 }
 
 void populationCount(BracetopiaBoard *boardPtr, int *populations) {

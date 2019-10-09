@@ -12,7 +12,7 @@
 
 #define _DEFAULT_SOURCE
 
-typedef enum { VACANT, NEWLINE, ENDLINE } alignment;
+typedef enum { VACANT = 0, NEWLINE = 1, ENDLINE = 2 } alignment;
 
 typedef struct {
     double happiness;
@@ -39,7 +39,8 @@ double getCommunityHappiness(BracetopiaBoard *boardPtr);
 double getCellHappiness(BracetopiaBoard *boardPtr, int x, int y);
 int move(BracetopiaBoard *boardPtr);
 Cell **allocateBoard(int size);
-coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, int x, int y);
+coordinate findNextVacantSpace(BracetopiaBoard *boardPtr, Cell **newBoard,
+                               int x, int y);
 void populateBoard(BracetopiaBoard *boardPtr, double percVac, double percEndl);
 void printGrid(BracetopiaBoard *boardPtr, int currCycle, int movesCycle);
 void populationCount(BracetopiaBoard *boardPtr, int *populations);
