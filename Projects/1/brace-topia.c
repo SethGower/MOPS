@@ -1,4 +1,11 @@
-#include "DebugMacros.h"
+/******************************************************************************
+ * File:             brace-topia.c
+ *
+ * Author:           Seth Gower
+ * Created:          10/8/19
+ * Description:      Main file for brace-topia. Project 1 for CSCI-243
+ *****************************************************************************/
+
 #include "bracetopia.h"
 #include "display.h"
 #include <getopt.h>
@@ -6,8 +13,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#undef _DEFAULT_SOURCE
-#define _DEFAULT_SOURCE
 typedef enum { CURSOR, PRINT } mode;
 int main(int argc, char *argv[]) {
     BracetopiaBoard board;
