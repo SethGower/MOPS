@@ -16,7 +16,7 @@ OUTPUT = $(OUTPUT_DIR)/brace-topia
 _OBJECTS = module.o brace-topia.o display.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
-_HEADERS = bracetopia.h DebugMacros.h display.h
+_HEADERS = bracetopia.h display.h
 HEADERS = $(patsubst %,$(INCLUDE_DIR)/%,$(_HEADERS))
 
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.
