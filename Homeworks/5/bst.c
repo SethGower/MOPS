@@ -11,7 +11,7 @@
 
 bool validBST(TreeNode *start, int rootVal);
 
-int main(int argc, char *argv[]) {
+int main() {
     TreeNode *bst = build_list();
     bool succ = reconstruct(bst);
     if (succ) {
