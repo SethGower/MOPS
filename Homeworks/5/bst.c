@@ -16,11 +16,11 @@ int main() {
     bool succ = reconstruct(bst);
     if (succ) {
         if (NULL != bst) {
-            printf("Preoder Traversal:\n");
+            printf("Preorder traversal:\n");
             traverse(bst, PREORDER);
-            printf("Inorder Traversal:\n");
+            printf("Inorder traversal:\n");
             traverse(bst, INORDER);
-            printf("Postorder Traversal:\n");
+            printf("Postorder traversal:\n");
             traverse(bst, POSTORDER);
         } else {
             printf("Empty BST\n");
