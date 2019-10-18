@@ -3,13 +3,13 @@
 #ifndef SYMTAB_H
 #define SYMTAB_H
 
-#define BUFLEN 1024             // input buffer length for initial symbols
+#define BUFLEN 1024 // input buffer length for initial symbols
 
 /// A single symbol definition
 typedef struct symbol_s {
-    char *var_name;             ///< the name of the symbol
-    int val;                    ///< the value currently bound to this symbol
-    struct symbol_s *next;      ///< the next item in the list
+    char *var_name;        ///< the name of the symbol
+    int val;               ///< the value currently bound to this symbol
+    struct symbol_s *next; ///< the next item in the list
 } symbol_t;
 
 /// Constructs the table by reading the file.  The format is

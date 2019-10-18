@@ -5,8 +5,8 @@
 
 /// Represents a single node in the stack
 typedef struct stack_node_s {
-	void *data;		        ///< data associated with the node	
-	struct stack_node_s *next;	///< pointer to next node (NULL if none)
+    void *data;                ///< data associated with the node
+    struct stack_node_s *next; ///< pointer to next node (NULL if none)
 } stack_node_t;
 
 #endif

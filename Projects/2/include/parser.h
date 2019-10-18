@@ -3,19 +3,19 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "tree_node.h"
 #include "stack.h"
+#include "tree_node.h"
 
 /// The types of errors that can be run into while parsing
 /// or evaluating the tree
 typedef enum parse_error_e {
-    PARSE_NONE,                 ///< no problems
-    TOO_FEW_TOKENS,             ///< not enough tokens in expression
-    TOO_MANY_TOKENS,            ///< too many tokens in expression
-    INVALID_ASSIGNMENT,         ///< assign to left hand side not a variable
-    NO_DIGITS,                  ///< attempt to have "." interpreted as a double
-    ILLEGAL_DOUBLE,             ///< too many "." in a double
-    ILLEGAL_TOKEN               ///< doesn't fit any other pattern
+    PARSE_NONE,         ///< no problems
+    TOO_FEW_TOKENS,     ///< not enough tokens in expression
+    TOO_MANY_TOKENS,    ///< too many tokens in expression
+    INVALID_ASSIGNMENT, ///< assign to left hand side not a variable
+    NO_DIGITS,          ///< attempt to have "." interpreted as a double
+    ILLEGAL_DOUBLE,     ///< too many "." in a double
+    ILLEGAL_TOKEN       ///< doesn't fit any other pattern
 } parse_error_t;
 
 typedef enum eval_error_e {
@@ -53,8 +53,8 @@ tree_node_t *parse(stack_t *stack);
 /// @return the root of the expression tree
 /// @exception There are 2 error conditions that you must deal
 ///     with.  In each case, the memory associated with the
-///     tree must be cleaned up before returning.  Neither 
-///     stops execution of the program. 
+///     tree must be cleaned up before returning.  Neither
+///     stops execution of the program.
 ///
 ///     1. If there are too few tokens, set the parser error
 ///     to TOO_FEW_TOKENS and display the message to standard error:
@@ -74,21 +74,21 @@ tree_node_t *make_parse_tree(char *expr);
 ///     is a parser error.
 /// @return the evaluated int.  Note:  A symbol evaluates
 ///     to the value bound to it.
-int eval_tree(tree_node_t * node);
+int eval_tree(tree_node_t *node);
 
 /// Displays the infix expression for the tree, using
 /// parentheses to indicate the precedence, e.g.:
 ///
 /// postfix expression: 10 20 + 30 *
-/// infix string: ((10+20)*30) 
+/// infix string: ((10+20)*30)
 ///
 /// @param node  the tree_node of the tree to print
 /// @precondition:  This routine should not be called if there
 ///     is a parser error.
-void print_infix(tree_node_t * node);
+void print_infix(tree_node_t *node);
 
 /// Cleans up all dynamic memory associated with the expression tree.
 /// @param node The current node in the tree
-void cleanup_tree(tree_node_t * node);
+void cleanup_tree(tree_node_t *node);
 
 #endif
