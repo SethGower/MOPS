@@ -8,22 +8,17 @@
 
 #include "interp.h"
 #include "stack.h"
+#include "symtab.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-    stack_t *stack = make_stack();
-    int i = 0;
-    int *xp;
-    for (i = 0; i < 20; i++) {
-        xp = malloc(sizeof(int));
-        *xp = i;
-        push(stack, xp);
-    }
-    for (i = 0; i < 20; i++) {
-        printf("%d\n", *(int *)top(stack));
-        pop(stack);
-    }
-    free_stack(stack);
+int main(int argc, char *argv[]) {
+    printf("%d\n", argc);
+
+    build_table(argv[1]);
+    dump_table();
+
+    printf("Symbol: %s has Value: %d\n", "x", lookup_table("x")->val);
+    free_table();
     return 0;
 }

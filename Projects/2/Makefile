@@ -13,7 +13,7 @@ OUTPUT = $(OUTPUT_DIR)/interp
 
 
 # object files
-_OBJECTS = interp.o stack.o #parser.o symtab.o tree_node.o
+_OBJECTS = interp.o stack.o symtab.o trim.o #parser.o symtab.o tree_node.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
 _HEADERS = interp.h parser.h stack.h stack_node.h symtab.h tree_node.h
@@ -37,10 +37,10 @@ clean:
 
 # run valgrind to check for any issues
 mem: all
-	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) > /dev/null
+	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) ./sym.1 > /dev/null
 
 run: all
-	$(OUTPUT)
+	$(OUTPUT) ./sym.1
 
 gdb: all
 	gdb $(OUTPUT)
