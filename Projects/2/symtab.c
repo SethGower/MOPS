@@ -17,6 +17,11 @@ void build_table(char *filename) {
             buff = trim(buff);
             if (buff[0] == '#')
                 continue;
+            /* check if first character is a letter */
+            if (!((buff[0] >= 65 && buff[0] <= 90) ||
+                  (buff[0] >= 97 && buff[0] <= 122)))
+                continue;
+            /* replace all internal tabs to spaces */
             for (i = 0; i < (int)strlen(buff); i++) {
                 if (buff[i] == '\t')
                     buff[i] = ' ';
