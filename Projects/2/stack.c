@@ -77,7 +77,6 @@ void pop(stack_t *stack) {
     if (!empty_stack(stack)) {
         stack_node_t *node = stack->top;
         stack->top = stack->top->next;
-        free(node->data);
         free(node);
     } else {
         fprintf(stderr, "Error while popping. Empty stack. Exiting...\n");
