@@ -40,7 +40,7 @@ void rep(char *exp) {
  * Function:         tree_node_t *parse
  *                   Recursively build the parse tree from the stack
  * Where:
- *                   stack_t *stack - TODO
+ *                   stack_t *stack - stack to create the tree with
  * Return:           Interpretation tree resulting from stack
  * Error:
  *****************************************************************************/
@@ -103,12 +103,79 @@ tree_node_t *parse(stack_t *stack) {
  *                   tree_node_t *node - TODO
  * Return:           Integer result of the expression in the parse tree
  *****************************************************************************/
-int eval_tree(tree_node_t *node) { return 0; }
+int eval_tree(tree_node_t *node) {
+    int result = 0;
+    int right, left;
+    symbol_t *symbol = NULL;
+    if (node->type == LEAF) {
+        if (((leaf_node_t *)node->node)->exp_type == INTEGER)
+            result = strtol(node->token, NULL, 10);
+        else {
+            symbol = lookup_table(node->token);
+            if (symbol)
+                result = symbol->val;
+            else {
+                fprintf(stderr, "Symbol '%s' not found in table. \n",
+                        node->token);
+                exit(EXIT_FAILURE);
+            }
+        }
+
+    } else {
+        interior_node_t *subnode = (interior_node_t *)node->node;
+        switch (((interior_node_t *)node->node)->op) {
+        case ADD_OP:
+            right = eval_tree(subnode->right);
+            left = eval_tree(subnode->left);
+            result = left + right;
+            break;
+        case SUB_OP:
+            right = eval_tree(subnode->right);
+            left = eval_tree(subnode->left);
+            result = left - right;
+            break;
+        case MUL_OP:
+            right = eval_tree(subnode->right);
+            left = eval_tree(subnode->left);
+            result = left * right;
+            break;
+        case DIV_OP:
+            right = eval_tree(subnode->right);
+            left = eval_tree(subnode->left);
+            result = left / right;
+            break;
+        case MOD_OP:
+            right = eval_tree(subnode->right);
+            left = eval_tree(subnode->left);
+            result = left % right;
+            result = eval_tree(subnode->left) % eval_tree(subnode->right);
+            break;
+        case ASSIGN_OP:
+            result = eval_tree(subnode->right);
+            symbol = lookup_table(subnode->left->token);
+            if (symbol)
+                symbol->val = result;
+            else
+                create_symbol(subnode->left->token, result);
+            break;
+        case Q_OP:
+            result = eval_tree(subnode->left);
+            subnode = (interior_node_t *)subnode->right->node;
+            if (result)
+                result = eval_tree(subnode->left);
+            else
+                result = eval_tree(subnode->right);
+            break;
+        default:
+            break;
+        }
+    }
+    return result;
+}
 
 /******************************************************************************
  * Function:         void print_infix
- *                   Prints the infix odering of the expression, given the tree
- * Where:
- *                   tree_node_t *node - TODO
+ *                   Prints the infix odering of the expression, given the
+ *tree Where: tree_node_t *node - parse tree to print
  *****************************************************************************/
 void print_infix(tree_node_t *node) {}
