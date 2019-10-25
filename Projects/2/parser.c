@@ -1,5 +1,10 @@
 #include "parser.h"
+#include "stack.h"
+#include "symtab.h"
+#include "tree_node.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /******************************************************************************
  * Function:         void rep
@@ -9,7 +14,27 @@
  * Return:           None
  * Error:            Prints to stderr and exits if invalid expression
  *****************************************************************************/
-void rep(char *exp) {}
+void rep(char *exp) {
+    char *token;
+    stack_t *stack = make_stack();
+    tree_node_t *tree;
+
+    char buff[BUFLEN];
+    strcpy(buff, exp);
+
+    /* read in the expression and generate stack */
+    token = strtok(buff, " ");
+    do {
+        if (token[0] != '#') {
+            push(stack, token);
+        } else {
+            break;
+        }
+    } while ((token = strtok(NULL, " ")));
+
+    tree = parse(stack);
+    printf("%d\n", eval_tree(tree));
+}
 
 /******************************************************************************
  * Function:         tree_node_t *parse
