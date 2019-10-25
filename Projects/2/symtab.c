@@ -77,15 +77,16 @@ symbol_t *create_symbol(char *name, int val) {
     printf("Adding symbol: %s = %d to table\n", name, val);
 #endif
     /* create new node on heap */
-    symbol_t *newNode = malloc(sizeof(symbol_t));
+    symbol_t *newNode = (symbol_t *)malloc(sizeof(symbol_t));
     symbol_t *currNode = table; /* start at beginning of table */
     symbol_t *prevNode = NULL;
     if (currNode == NULL) { /* if the first node being added */
         table = newNode;
-        table->var_name = malloc(strlen(name) + 1); /* create space for name */
-        strcpy(table->var_name, name);              /* copy in name */
-        table->val = val;                           /* direct copy the value */
-        table->next = NULL;                         /* the next thing is NULL */
+        table->var_name =
+            (char *)malloc(strlen(name) + 1); /* create space for name */
+        strcpy(table->var_name, name);        /* copy in name */
+        table->val = val;                     /* direct copy the value */
+        table->next = NULL;                   /* the next thing is NULL */
     } else {
         /* iterate through the linked list, until either the end of the list
          * has been reached or it has found something that comes before it
@@ -110,7 +111,7 @@ symbol_t *create_symbol(char *name, int val) {
         /* sets the various attributes of the new node */
         currNode = newNode;
         /* allocates enough space for just the string and the null terminator */
-        currNode->var_name = malloc(strlen(name) + 1);
+        currNode->var_name = (char *)malloc(strlen(name) + 1);
         strcpy(currNode->var_name, name);
         currNode->val = val;
     }

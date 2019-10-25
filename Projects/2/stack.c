@@ -16,7 +16,7 @@ stack_t *make_stack() {
      * the way this function works, it just took in an address to a stack to
      * "create", the user can decide whether or not to store it on the heap or
      * stack. */
-    stack_t *stack = calloc(1, sizeof(stack_t));
+    stack_t *stack = (stack_t *)calloc(1, sizeof(stack_t));
     stack->top = NULL;
     return stack;
 }
@@ -33,7 +33,7 @@ void push(stack_t *stack, void *data) {
      * defined is a great way to do this. I think it would be better if the
      * data was stored in the node and not a pointer to it. Since this is more
      * spread out than it needs to be. */
-    stack_node_t *node = calloc(1, sizeof(stack_node_t));
+    stack_node_t *node = (stack_node_t *)calloc(1, sizeof(stack_node_t));
     node->data = data;
     node->next = stack->top;
     stack->top = node;
