@@ -7,18 +7,16 @@
  *****************************************************************************/
 
 #include "interp.h"
+#include "parser.h"
 #include "stack.h"
 #include "symtab.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[]) {
-    printf("%d\n", argc);
+int main() {
 
-    build_table(argv[1]);
-    dump_table();
+    build_table("sym.1");
+    rep("0 b c ?");
 
-    printf("Symbol: %s has Value: %d\n", "x", lookup_table("x")->val);
-    free_table();
     return 0;
 }
