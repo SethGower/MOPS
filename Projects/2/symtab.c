@@ -53,7 +53,7 @@ void dump_table() {
     printf("SYMBOL TABLE:\n");
     /* traverse the table */
     while (currNode) {
-        printf("    Symbol: %s, Value: %d\n", currNode->var_name,
+        printf("    Symbol: %5s, Value: %d\n", currNode->var_name,
                currNode->val);
         currNode = currNode->next;
     }

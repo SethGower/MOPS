@@ -16,7 +16,8 @@
 int main() {
 
     build_table("sym.1");
-    rep("0 b c ?");
+    rep("a b + c * 7 +");
+    rep("0 3 5 ?");
 
     return 0;
 }
