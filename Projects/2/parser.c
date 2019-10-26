@@ -33,6 +33,8 @@ void rep(char *exp) {
     } while ((token = strtok(NULL, " ")));
 
     tree = parse(stack);
+    print_infix(tree);
+    printf(" = ");
     printf("%d\n", eval_tree(tree));
 }
 
@@ -161,10 +163,8 @@ int eval_tree(tree_node_t *node) {
         case Q_OP:
             result = eval_tree(subnode->left);
             subnode = (interior_node_t *)subnode->right->node;
-            if (result)
-                result = eval_tree(subnode->left);
-            else
-                result = eval_tree(subnode->right);
+            result =
+                result ? eval_tree(subnode->left) : eval_tree(subnode->right);
             break;
         default:
             break;
@@ -178,4 +178,15 @@ int eval_tree(tree_node_t *node) {
  *                   Prints the infix odering of the expression, given the
  *tree Where: tree_node_t *node - parse tree to print
  *****************************************************************************/
-void print_infix(tree_node_t *node) {}
+void print_infix(tree_node_t *node) {
+    if (LEAF == node->type) {
+        printf("%s", node->token);
+    } else {
+        putchar('(');
+        interior_node_t *subnode = (interior_node_t *)node->node;
+        print_infix(subnode->left);
+        printf("%s", node->token);
+        print_infix(subnode->right);
+        putchar(')');
+    }
+}
