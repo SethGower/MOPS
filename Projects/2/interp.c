@@ -14,10 +14,11 @@
 #include <stdlib.h>
 
 int main() {
-
+    char *buff = malloc(BUFLEN);
     build_table("sym.1");
     rep("a b + c * 7 +");
     rep("0 3 5 ?");
-
+    free(buff);
+    free_table();
     return 0;
 }

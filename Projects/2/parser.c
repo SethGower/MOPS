@@ -36,6 +36,8 @@ void rep(char *exp) {
     print_infix(tree);
     printf(" = ");
     printf("%d\n", eval_tree(tree));
+    free_stack(stack);
+    cleanup_tree(tree);
 }
 
 /******************************************************************************
@@ -188,5 +190,20 @@ void print_infix(tree_node_t *node) {
         printf("%s", node->token);
         print_infix(subnode->right);
         putchar(')');
+    }
+}
+
+void cleanup_tree(tree_node_t *node) {
+    if (NULL != node) {
+        if (LEAF == node->type) {
+            free(node->node);
+            free(node);
+        } else {
+            interior_node_t *subnode = (interior_node_t *)node->node;
+            cleanup_tree(subnode->left);
+            cleanup_tree(subnode->right);
+            free(subnode);
+            free(node);
+        }
     }
 }
