@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# testing script for student to compare output with the example outputs
+#
+# Student: execute this script to compare your output with the examples.
+
+for f in 1 2 3
+do
+	echo Running test $f
+	./mapTest$f > out.$f
+	echo cmp stdout.$f out.$f
+	cmp stdout.$f out.$f
+done
