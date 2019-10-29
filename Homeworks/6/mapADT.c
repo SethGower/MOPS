@@ -30,17 +30,20 @@ void *map_put(MapADT map, void *key, void *value) {
             currNode = currNode->next;
         }
         if (map_contains(map, key)) {
-            if (currNode) {
+            if (!currNode) {
                 currNode = prevNode;
             }
             returnVal = currNode->value;
             currNode->value = value;
             free(newNode);
         } else {
-            prevNode->next = newNode;
             newNode->next = currNode;
             newNode->key = key;
             newNode->value = value;
+            if (prevNode)
+                prevNode->next = newNode;
+            else
+                map->map = newNode;
             returnVal = NULL;
         }
     } else {
@@ -59,6 +62,7 @@ void map_clear(MapADT map) {
         free(currNode);
         currNode = next;
     }
+    map->map = NULL;
 }
 bool map_contains(const MapADT map, const void *key) {
     entry_t *currNode = map->map;

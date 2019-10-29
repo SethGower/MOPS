@@ -53,7 +53,7 @@ run: all
 
 
 gdb: all
-	gdb $(word 1, $(OUTPUTS))
+	gdb $(word 3, $(OUTPUTS))
 
 # help: list available make options
 help:
