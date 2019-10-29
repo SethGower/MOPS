@@ -20,7 +20,7 @@ typedef struct mapStruct *MapADT;
 /// routine.
 ///
 /// The comparison function takes two void* parameters, and returns
-/// an integer result which indicates if the two things are identical: 
+/// an integer result which indicates if the two things are identical:
 ///
 ///	Result	Relationship
 ///	======	===========
@@ -32,14 +32,14 @@ typedef struct mapStruct *MapADT;
 ///    determining the relationship between two keys
 /// @return the created MapADT, or NULL if the allocation fails
 ///
-MapADT map_create( int (*compare)(const void *a, const void *b) );
+MapADT map_create(int (*compare)(const void *a, const void *b));
 
 ///
 /// Tear down and deallocate the supplied MapADT.
 ///
 /// @param map - the MapADT to be manipulated
 ///
-void map_destroy( MapADT map );
+void map_destroy(MapADT map);
 
 ///
 /// Remove all contents from the supplied MapADT, but do not
@@ -47,7 +47,7 @@ void map_destroy( MapADT map );
 ///
 /// @param map - the MapADT to be manipuated
 ///
-void map_clear( MapADT map );
+void map_clear(MapADT map);
 
 ///
 /// Check if the specified entry exists in the map
@@ -59,13 +59,13 @@ void map_clear( MapADT map );
 /// @param key the key to lookup in the map
 /// @return true if the entry exists, else false
 ///
-bool map_contains( const MapADT map, const void *key );
+bool map_contains(const MapADT map, const void *key);
 
 ///
 /// Put the specified entry into the Map
 ///
 /// Uses the map's equals function to determine if an entry with
-/// the same key already exists in the map. If so, then replace it 
+/// the same key already exists in the map. If so, then replace it
 /// and return a pointer to the old value.
 ///
 /// @param map the MapADT into which the value is to be inserted
@@ -77,7 +77,7 @@ bool map_contains( const MapADT map, const void *key );
 ///     printing an appropriate message to the standard error output and
 ///     then exiting with EXIT_FAILURE, or by having an assert() fail.
 ///
-void* map_put( MapADT map, void *key, void *value);
+void *map_put(MapADT map, void *key, void *value);
 
 ///
 /// Find the entry specified by the key and return a pointer to the value
@@ -89,11 +89,11 @@ void* map_put( MapADT map, void *key, void *value);
 ///     appropriate message to the standard error output and then
 ///     exiting with EXIT_FAILURE, or by having an assert() fail.
 ///
-const void *map_get( const MapADT map, const void *key );
+const void *map_get(const MapADT map, const void *key);
 
 ///
 /// Find the entry specified by the key and remove it from the MapADT,
-/// returning the value pointer. 
+/// returning the value pointer.
 ///
 /// @param map the MapADT to be manipulated
 /// @return the value that was removed from the map
@@ -102,7 +102,7 @@ const void *map_get( const MapADT map, const void *key );
 ///     appropriate message to the standard error output and then
 ///     exiting with EXIT_FAILURE, or by having an assert() fail.
 ///
-void *map_delete( MapADT map, const void *key );
+void *map_delete(MapADT map, const void *key);
 
 ///
 /// Indicate whether or not the supplied Map is empty
@@ -110,7 +110,6 @@ void *map_delete( MapADT map, const void *key );
 /// @param the MapADT to be tested
 /// @return true if the map is empty, otherwise false
 ///
-bool map_empty( const MapADT map );
+bool map_empty(const MapADT map);
 
 #endif
-
