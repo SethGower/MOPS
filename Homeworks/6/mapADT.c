@@ -1,3 +1,11 @@
+/******************************************************************************
+ * File:             mapADT.c
+ *
+ * Author:           Seth Gower
+ * Created:          10/30/19
+ *                   ADT Module for mapADT homework for CSCI-243 homework 6
+ *****************************************************************************/
+
 #include "mapADT.h"
 #include <assert.h>
 #include <stdio.h>
