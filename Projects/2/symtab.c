@@ -10,6 +10,7 @@
 #define _DEFAULT_SOURCE
 #include "symtab.h"
 #include "trimit.h"
+#include <assert.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,12 +19,16 @@
 static symbol_t *table = NULL;
 void build_table(char *filename) {
     /* opens file to read in symbols */
+    int errorCode; /* temp variable to store errno */
     FILE *file = fopen(filename, "r");
+    if ((errorCode = errno)) {
+        perror("symtab input file");
+        exit(errorCode);
+    }
     size_t bufferSize = BUFLEN;
     char *buff = malloc(BUFLEN); /* string to store the current line */
     char *tokens;                /* string for the current token */
     int i;                       /* loop control variable for for loops */
-    int errorCode;               /* temp variable to store errno */
     char currSym[BUFLEN];        /* current symbol being added to table */
     int currVal;        /* value of current symbol being added to table*/
     if (NULL != file) { /* checks if the file exists */
@@ -89,12 +94,16 @@ symbol_t *lookup_table(char *variable) {
 /* creates a symbol in the table, and inserts it into the table alphabetically
  */
 symbol_t *create_symbol(char *name, int val) {
+    int errorCode;
 #ifdef DEBUG /* if compiled with DEBUG, then print every time symbol is        \
                 created */
     printf("Adding symbol: %s = %d to table\n", name, val);
 #endif
     /* create new node on heap */
     symbol_t *newNode = (symbol_t *)malloc(sizeof(symbol_t));
+    if ((errorCode = errno)) {
+        perror("Symbol Creation");
+    }
     symbol_t *currNode = table; /* start at beginning of table */
     symbol_t *prevNode = NULL;
     if (currNode == NULL) { /* if the first node being added */

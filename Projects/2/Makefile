@@ -37,7 +37,7 @@ clean:
 
 # run valgrind to check for any issues
 mem: all
-	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) ./sym.1 > /dev/null
+	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) ./sym.1 < ./testfile > /dev/null
 
 run: all
 	- $(OUTPUT) ./sym.1

@@ -1,3 +1,7 @@
+// This file was given to me from a friend of mine last year when she was
+// taking MOPS. She said it was provided by the department. I take no credit
+// for writing it, I am just using it to trim white space (trailing and
+// leading) on input buffer lines. 
 #include <ctype.h>  // isspace
 #include <string.h> // strlen
 

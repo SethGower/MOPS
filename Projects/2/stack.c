@@ -1,3 +1,11 @@
+/******************************************************************************
+ * File:             stack.c
+ *
+ * Author:           Seth Gower
+ * Created:          10/31/19
+ *                   module file to implement stack
+ *****************************************************************************/
+
 #include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
