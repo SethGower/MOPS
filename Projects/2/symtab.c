@@ -1,5 +1,16 @@
+/******************************************************************************
+ * File:             symtab.c
+ *
+ * Author:           Seth Gower
+ * Created:          10/31/19
+ * Description:      Module file for creating and builting symbol table for
+ *                   parsing and evaluating
+ *****************************************************************************/
+
+#define _DEFAULT_SOURCE
 #include "symtab.h"
 #include "trimit.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,13 +19,19 @@ static symbol_t *table = NULL;
 void build_table(char *filename) {
     /* opens file to read in symbols */
     FILE *file = fopen(filename, "r");
+    size_t bufferSize = BUFLEN;
     char *buff = malloc(BUFLEN); /* string to store the current line */
     char *tokens;                /* string for the current token */
     int i;                       /* loop control variable for for loops */
+    int errorCode;               /* temp variable to store errno */
     char currSym[BUFLEN];        /* current symbol being added to table */
     int currVal;        /* value of current symbol being added to table*/
     if (NULL != file) { /* checks if the file exists */
-        while (fgets(buff, BUFLEN, file)) { /* loop every line */
+        while (getline(&buff, &bufferSize, file) > 0) { /* loop every line */
+            if ((errorCode = errno)) {
+                perror("Symbol table getline()");
+                exit(errorCode);
+            }
             buff = trim(buff);  /* trims trailing and leading whitespace */
             if (buff[0] == '#') /* check if comment */
                 continue;
