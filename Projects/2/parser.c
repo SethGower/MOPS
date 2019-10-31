@@ -1,7 +1,18 @@
+/******************************************************************************
+ * File:             parser.c
+ *
+ * Author:           Seth Gower
+ * Created:          10/20/19
+ *                   Source file for parsing the expressions and evaluating
+ *****************************************************************************/
+
 #include "parser.h"
 #include "stack.h"
 #include "symtab.h"
 #include "tree_node.h"
+#include <errno.h>
+#include <fenv.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,11 +30,8 @@ void rep(char *exp) {
     stack_t *stack = make_stack();
     tree_node_t *tree;
 
-    char buff[BUFLEN];
-    strcpy(buff, exp);
-
     /* read in the expression and generate stack */
-    token = strtok(buff, " ");
+    token = strtok(exp, " ");
     do {
         if (token[0] != '#') {
             push(stack, token);
@@ -33,9 +41,13 @@ void rep(char *exp) {
     } while ((token = strtok(NULL, " ")));
 
     tree = parse(stack);
-    print_infix(tree);
-    printf(" = ");
-    printf("%d\n", eval_tree(tree));
+    int result = eval_tree(tree);
+    if (!errno) {
+        print_infix(tree);
+        printf(" = ");
+        printf("%d\n", result);
+    }
+    errno = 0;
     free_stack(stack);
     cleanup_tree(tree);
 }
@@ -74,7 +86,7 @@ tree_node_t *parse(stack_t *stack) {
     else if (tok[0] == ':')
         op = ALT_OP;
     else
-        op = NO_OP; /* not handling ternery yet */
+        op = NO_OP;
 
     if (op != NO_OP) { /* if it is an operation */
         if (op != Q_OP) {
@@ -121,7 +133,8 @@ int eval_tree(tree_node_t *node) {
             else {
                 fprintf(stderr, "Symbol '%s' not found in table. \n",
                         node->token);
-                exit(EXIT_FAILURE);
+                errno = EBADR;
+                return errno;
             }
         }
 
@@ -146,6 +159,14 @@ int eval_tree(tree_node_t *node) {
         case DIV_OP:
             right = eval_tree(subnode->right);
             left = eval_tree(subnode->left);
+            if (0 == right) {
+                fprintf(stderr,
+                        "Evaluation resulted in division by 0: %d / %d, "
+                        "continuing\n",
+                        left, right);
+                errno = FE_DIVBYZERO;
+                return errno;
+            }
             result = left / right;
             break;
         case MOD_OP:
