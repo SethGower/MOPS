@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
             return EXIT_FAILURE;
         }
         putchar('\n');
-        printf("set1:%c 0x%016lX\n", '\t', set1);
-        printf("set2:%c 0x%016lX\n", '\t', set2);
+        printf("set1:	0x%016lX\n", set1);
+        printf("set2:	0x%016lX\n", set2);
         putchar('\n');
         printf("set_intersect:	0x%016lx\n", set_intersect(set1, set2));
         printf("set_union:	0x%016lx\n", set_union(set1, set2));
@@ -56,20 +56,24 @@ int main(int argc, char *argv[]) {
         printf("set1 set_complement:	0x%016lx\n", set_complement(set1));
         printf("set2 set_complement:	0x%016lx\n", set_complement(set2));
         putchar('\n');
-        printf("set_difference:	0x%016lx\n", set_difference(set1, set2));
-        uint64_t diff = set_difference(set1, set2);
+        printf("set_difference:		0x%016lx\n",
+               set_difference(set1, set2));
+        /* uint64_t diff = set_difference(set1, set2); */
+        /* printf("Set1: "); */
         /* printBits(sizeof(uint64_t), &set1); */
+        /* printf("Set2: "); */
         /* printBits(sizeof(uint64_t), &set2); */
+        /* printf("Diff: "); */
         /* printBits(sizeof(uint64_t), &diff); */
         printf("set_symdifference:	0x%016lx\n",
                set_symdifference(set1, set2));
         putchar('\n');
-        printf("set1 cardinality:	%ld\n", set_cardinality(set1));
-        printf("set2 cardinality:	%ld\n", set_cardinality(set2));
+        printf("set1 set_cardinality:	%ld\n", set_cardinality(set1));
+        printf("set2 set_cardinality:	%ld\n", set_cardinality(set2));
         putchar('\n');
         char *set1mems, *set2mems;
-        printf("set1 members:	'%s'\n", set1mems = set_members(set1));
-        printf("set2 members:	'%s'\n", set2mems = set_members(set2));
+        printf("members of set1:	'%s'\n", set1mems = set_members(set1));
+        printf("members of set2:	'%s'\n", set2mems = set_members(set2));
         free(set1mems);
         free(set2mems);
     }
@@ -113,8 +117,12 @@ uint64_t set_encode(char *st) {
     uint64_t set = 0;
     size_t i = 0;
     uint64_t shift = 0;
+    uint8_t index = 0;
     for (i = 0; i < strlen(st); i++) {
-        shift = ((SETSIZE - 1) - get_index(set_def, st[i]));
+        index = get_index(set_def, st[i]);
+        if (SETSIZE <= index)
+            continue;
+        shift = ((SETSIZE - 1) - index);
         /* printf("Shift: %ld\n", shift); */
         /* printf("Index: %d\n", get_index(st[i])); */
         set |= (uint64_t)1 << shift;
@@ -148,8 +156,26 @@ void printBits(size_t const size, void const *const ptr) {
 uint64_t set_intersect(uint64_t set1, uint64_t set2) { return set1 & set2; }
 uint64_t set_union(uint64_t set1, uint64_t set2) { return set1 | set2; }
 uint64_t set_complement(uint64_t set1) { return ~set1; }
-uint64_t set_difference(uint64_t set1, uint64_t set2) { return set2 ^ set1; }
-uint64_t set_symdifference(uint64_t set1, uint64_t set2) { return 0; }
+uint64_t set_difference(uint64_t set1, uint64_t set2) {
+    uint64_t diff = 0;
+    int i = 0;
+    uint64_t shifted1 = 0;
+    uint64_t shifted2 = 0;
+    for (i = SETSIZE - 1; i >= 0; i--) {
+        shifted1 = set1 >> i;
+        shifted2 = set2 >> i;
+        if (shifted1 % 2 && !(shifted2 % 2)) {
+            diff |= ((uint64_t)1 << (i));
+        }
+    }
+    return diff;
+}
+uint64_t set_symdifference(uint64_t set1, uint64_t set2) {
+    uint64_t diff1, diff2;
+    diff1 = set_difference(set1, set2);
+    diff2 = set_difference(set2, set1);
+    return set_union(diff1, diff2);
+}
 
 /******************************************************************************
  * Function:         size_t set_cardinality
