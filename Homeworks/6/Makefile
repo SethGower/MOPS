@@ -21,7 +21,7 @@ TEST_SCRIPT = ./RUN
 MEM_OUT = $(OUTPUT_DIR)/mem.txt
 
 # object files
-_OBJECTS = mapTest1.o mapTest2.o mapTest3.o mapADT.o# mytest.o
+_OBJECTS = mapTest1.o mapTest2.o mapTest3.o mapADT.o mytest.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
 _HEADERS = mapADT.h
@@ -43,8 +43,8 @@ $(OUTPUT2): $(word 4, $(OBJECTS)) $(word 2, $(OBJECTS))
 $(OUTPUT3): $(word 4, $(OBJECTS)) $(word 3, $(OBJECTS))
 	$(CC) $(CFLAGS) $(LIBS) $(word 4, $(OBJECTS)) $(word 3, $(OBJECTS)) -o $(word 3, $(OUTPUTS))
 
-# $(OUTPUT4): $(word 4, $(OBJECTS)) $(word 5, $(OBJECTS))
-# 	$(CC) $(CFLAGS) $(LIBS) $(word 4, $(OBJECTS)) $(word 5, $(OBJECTS)) -o $(word 4, $(OUTPUTS))
+$(OUTPUT4): $(word 4, $(OBJECTS)) $(word 5, $(OBJECTS))
+	$(CC) $(CFLAGS) $(LIBS) $(word 4, $(OBJECTS)) $(word 5, $(OBJECTS)) -o $(word 4, $(OUTPUTS))
 
 # clean: remove all object files and output, use -f option.
 .PHONY: clean run help gdb

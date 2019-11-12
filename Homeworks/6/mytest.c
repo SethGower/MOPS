@@ -68,15 +68,16 @@ void process_uint(MapADT map) {
 
 int main() {
     MapADT map = map_create(compare_uint);
-    unsigned int *key = (unsigned int *)malloc(sizeof(unsigned int));
-    long int *value = (long int *)malloc(sizeof(long int));
-    *key = 5;
-    *value = 69;
-    map_put(map, (void *)key, (void *)value);
-    printf("%d\n", *(unsigned int *)map_get(map, (void *)key));
-    value = (long int *)map_delete(map, (void *)key);
-    printf("Value removed was %d\n", (int)*value);
+    /* unsigned int *key = (unsigned int *)malloc(sizeof(unsigned int)); */
+    /* long int *value = (long int *)malloc(sizeof(long int)); */
+    /* *key = 5; */
+    /* *value = 69; */
+    /* map_put(map, (void *)key, (void *)value); */
+    /* printf("%d\n", *(unsigned int *)map_get(map, (void *)key)); */
+    /* value = (long int *)map_delete(map, (void *)key); */
+    /* printf("Value removed was %d\n", (int)*value); */
 
+    map_get(NULL, (void *)"fuck");
     map_destroy(map);
     return 0;
 }
