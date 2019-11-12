@@ -19,11 +19,8 @@ MEM_OUT = $(OUTPUT_DIR)/mem.txt
 _OBJECTS = file-bitsets.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
-_HEADERS = file-bitsets.h
-HEADERS = $(patsubst %,$(INCLUDE_DIR)/%,$(_HEADERS))
-
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.
-$(OBJECT_DIR)/%.o: %.c $(HEADERS)
+$(OBJECT_DIR)/%.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # all: Generate output, using compiled .obj files

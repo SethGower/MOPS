@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 
         fp2 = fopen(argv[2], "rb");
         if (NULL != fp2) {
-            printf("string2:	%s	Encoding the file:	%s\n", argv[1],
+            printf("string2:	%s	Encoding the file:	%s\n", argv[2],
                    argv[2]);
             set2 = file_set_encode(fp2);
             fclose(fp2);
@@ -58,8 +58,8 @@ int main(int argc, char *argv[]) {
             return EXIT_FAILURE;
         }
         putchar('\n');
-        printf("set1:	0x%016lX\n", set1);
-        printf("set2:	0x%016lX\n", set2);
+        printf("set1:	0x%016lx\n", set1);
+        printf("set2:	0x%016lx\n", set2);
         putchar('\n');
         printf("set_intersect:	0x%016lx\n", set_intersect(set1, set2));
         printf("set_union:	0x%016lx\n", set_union(set1, set2));
