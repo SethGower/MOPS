@@ -104,10 +104,10 @@ int main(int argc, char *argv[]) {
 uint64_t file_set_encode(FILE *fp) {
     uint64_t set = 0;
     char *buff;
-    buff = (char *)calloc(sizeof(char), BUFSIZ);
-    int ret;
+    buff = (char *)calloc(sizeof(char), BUFSIZE + 1);
+    int ret = 0;
     /* reads through the input file, until no more characters are read */
-    while ((ret = fread(buff, 1, BUFSIZ, fp))) {
+    while ((ret = fread(buff, 1, BUFSIZE, fp))) {
         /* updates the current set with the set of the current buffer of
          * characters from file */
         set = set | set_encode(buff);
