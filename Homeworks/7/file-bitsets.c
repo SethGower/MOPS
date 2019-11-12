@@ -1,14 +1,25 @@
-#include "file-bitsets.h"
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-const size_t BUFSIZE = 256;
+#define SETSIZE (sizeof(uint64_t) << 3)
+#define BUFSIZE 256
+
+void printBits(size_t const size, void const *const ptr);
+uint64_t file_set_encode(FILE *fp);
+uint64_t set_encode(char *st);
+uint8_t get_index(const char *set, char c);
+uint64_t set_intersect(uint64_t set1, uint64_t set2);
+uint64_t set_union(uint64_t set1, uint64_t set2);
+uint64_t set_complement(uint64_t set1);
+uint64_t set_difference(uint64_t set1, uint64_t set2);
+uint64_t set_symdifference(uint64_t set1, uint64_t set2);
+size_t set_cardinality(uint64_t set);
+char *set_members(uint64_t set); // the string of characters in the bit set
 const char *set_def =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,0123456789";
-void printBits(size_t const size, void const *const ptr);
 int main(int argc, char *argv[]) {
     int returnCode = EXIT_SUCCESS;
     FILE *fp1, *fp2;
@@ -188,7 +199,7 @@ uint64_t set_symdifference(uint64_t set1, uint64_t set2) {
 size_t set_cardinality(uint64_t set) {
     size_t count = 0;
     uint64_t shifted = 0;
-    int i = 0;
+    size_t i = 0;
     for (i = 0; i < SETSIZE; i++) {
         shifted = set >> i;
         if (shifted % 2) /* if it is even, that means lsb is 1, meaning there
