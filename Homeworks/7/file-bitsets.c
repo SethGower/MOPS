@@ -7,7 +7,7 @@
 #define SETSIZE (sizeof(uint64_t) << 3)
 #define BUFSIZE 256
 
-void printBits(size_t const size, void const *const ptr);
+/* I hate how we weren't allowed to have a header file... */
 uint64_t file_set_encode(FILE *fp);
 uint64_t set_encode(char *st);
 uint8_t get_index(const char *set, char c);
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     FILE *fp1, *fp2;
     uint64_t set1, set2;
     if (argc > 3 || argc < 3) {
-        fprintf(stderr, "Usage: ./file-bitsets string1 string2\n");
+        fprintf(stderr, "Usage: %s string1 string2\n", argv[0]);
         returnCode = EXIT_FAILURE;
     } else {
         fp1 = fopen(argv[1], "rb");
@@ -67,15 +67,7 @@ int main(int argc, char *argv[]) {
         printf("set1 set_complement:	0x%016lx\n", set_complement(set1));
         printf("set2 set_complement:	0x%016lx\n", set_complement(set2));
         putchar('\n');
-        printf("set_difference:		0x%016lx\n",
-               set_difference(set1, set2));
-        /* uint64_t diff = set_difference(set1, set2); */
-        /* printf("Set1: "); */
-        /* printBits(sizeof(uint64_t), &set1); */
-        /* printf("Set2: "); */
-        /* printBits(sizeof(uint64_t), &set2); */
-        /* printf("Diff: "); */
-        /* printBits(sizeof(uint64_t), &diff); */
+        printf("set_difference:		0x%016lx\n", set_difference(set1, set2));
         printf("set_symdifference:	0x%016lx\n",
                set_symdifference(set1, set2));
         putchar('\n');
@@ -134,8 +126,6 @@ uint64_t set_encode(char *st) {
         if (SETSIZE <= index)
             continue;
         shift = ((SETSIZE - 1) - index);
-        /* printf("Shift: %ld\n", shift); */
-        /* printf("Index: %d\n", get_index(st[i])); */
         set |= (uint64_t)1 << shift;
     }
     return set;
@@ -149,38 +139,105 @@ uint64_t set_encode(char *st) {
  * Return:           Integer index in the set
  * Error:            Sets errno to EINVAL (invalid argument)
  *****************************************************************************/
-uint8_t get_index(const char *set, char c) { return strchr(set, c) - set; }
-
-void printBits(size_t const size, void const *const ptr) {
-    unsigned char *b = (unsigned char *)ptr;
-    unsigned char byte;
-    int i, j;
-
-    for (i = size - 1; i >= 0; i--) {
-        for (j = 7; j >= 0; j--) {
-            byte = (b[i] >> j) & 1;
-            printf("%u", byte);
-        }
-    }
-    puts("");
+uint8_t get_index(const char *set, char c) {
+    /* strchr returns the pointer to the character being searched for in the
+     * string. So the index is the difference between the characters pointer
+     * and the given set being seached's pointer */
+    return strchr(set, c) - set;
 }
-uint64_t set_intersect(uint64_t set1, uint64_t set2) { return set1 & set2; }
-uint64_t set_union(uint64_t set1, uint64_t set2) { return set1 | set2; }
-uint64_t set_complement(uint64_t set1) { return ~set1; }
+
+/******************************************************************************
+ * Function:         uint64_t set_intersect
+ * Description:      Returns the intersect of the two sets. The intersect is
+ *                   defined as the elements that reside in both sets, ie an
+ *                   AND operation
+ * Where:
+ *                   uint64_t set1 - the first set argument
+ *                   uint64_t set2 - the second set argument
+ * Return:           The set (subset) that is the intersect of the two sets
+ * Error:            None
+ *****************************************************************************/
+uint64_t set_intersect(uint64_t set1, uint64_t set2) {
+    /* returns the intersect, which is just an AND operation */
+    return set1 & set2;
+}
+
+/******************************************************************************
+ * Function:         uint64_t set_union
+ * Description:      Returns the union of the two sets, which is defined as the
+ *                   superset that contains all of the elements in either set,
+ *                   ie an OR operation
+ * Where:
+ *                   uint64_t set1 - the first set argument
+ *                   uint64_t set2 - the second set argument
+ * Return:           The set containing all elements in either set
+ * Error:            None
+ *****************************************************************************/
+uint64_t set_union(uint64_t set1, uint64_t set2) {
+    /* the union is just the OR operation */
+    return set1 | set2;
+}
+
+/******************************************************************************
+ * Function:         uint64_t set_complement
+ * Description:      Returns the complement of the set. This is defined as the
+ *                   set that contains all elements not in the given set, ie a
+ *                   NOT operation
+ * Where:
+ *                   uint64_t set1 - the first set argument
+ * Return:           The complement of the set
+ * Error:            None
+ *****************************************************************************/
+uint64_t set_complement(uint64_t set1) {
+    /* the complement is just the inverted set */
+    return ~set1;
+}
+
+/******************************************************************************
+ * Function:         uint64_t set_difference
+ * Description:      Returns the difference of the two sets. This is defined as
+ * the set that contains all of the elements in the first set, that were not in
+ *                   Returns the difference of the two sets. This is defined as
+ *                   * the set that contains all of the elements in the first
+ *                   set, that were not in * the second set
+ * Where:
+ *                   uint64_t set1 - the first set argument
+ *                   uint64_t set2 - the second set argument
+ * Return:           Returns the set: set1-set2
+ * Error:            None
+ *****************************************************************************/
 uint64_t set_difference(uint64_t set1, uint64_t set2) {
-    uint64_t diff = 0;
-    int i = 0;
-    uint64_t shifted1 = 0;
+    uint64_t diff = 0;     /* current running result set */
+    long int i = 0;        /* loop control variable */
+    uint64_t shifted1 = 0; /* values to store shfited versions of sets */
     uint64_t shifted2 = 0;
+    /* loop through every single bit in the set */
     for (i = SETSIZE - 1; i >= 0; i--) {
-        shifted1 = set1 >> i;
+        shifted1 =
+            set1 >> i; /* creates the shifted sets to get the current value */
         shifted2 = set2 >> i;
+        /* checks if even, since that means the current bit being checked is 0
+         * if this is false (lsb == 1) and the lsb of set2 (shifted) is 0,
+         * then shift a 1 into the current place and OR it with the current
+         * running result set */
         if (shifted1 % 2 && !(shifted2 % 2)) {
             diff |= ((uint64_t)1 << (i));
         }
     }
     return diff;
 }
+
+/******************************************************************************
+ * Function:         uint64_t set_symdifference
+ * Description:      Returns the symmetric difference of the two sets. This is
+ *                   defined as: set_union(set_difference(set1,set2),
+ *                   set_difference(set2, set1))
+ * Where:
+ *                   uint64_t set1 - the first set argument
+ *                   uint64_t set2 - the second set argument
+ * Return:           The symmetric difference
+ * Error:            None
+ *****************************************************************************/
 uint64_t set_symdifference(uint64_t set1, uint64_t set2) {
     uint64_t diff1, diff2;
     diff1 = set_difference(set1, set2);
