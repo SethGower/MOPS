@@ -129,3 +129,24 @@ size_t treeSize(treeNode *tree) {
     }
     return num;
 }
+void printNode(treeNode *node) {
+    size_t i = 0;
+    if (NULL != node) {
+        printf("%s had ", node->name);
+        if (node->numChildren) { /* if they have children, print them */
+            /* print the first child, may be only child */
+            printf("%s", node->children[0].name);
+            /* print children [1,numChildren) preceded by comma */
+            /* if there are more than 1 children, then print last child
+             * preceded by 'and' without a comma */
+            if (node->numChildren > 1) {
+                printf(" and %s", node->children[node->numChildren - 1].name);
+            }
+            /* end this lind of output with period and newline */
+            printf(".\n");
+
+        } else { /* if they didn't have kids, print that */
+            printf("no offspring.\n");
+        }
+    }
+}

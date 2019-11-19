@@ -76,4 +76,14 @@ treeNode *addChild(treeNode *tree, char *parent, char *child);
  * Error:            None
  *****************************************************************************/
 size_t treeSize(treeNode *tree);
+
+/******************************************************************************
+ * Function:         void printNode
+ *                   Prints the Name and name of all children of a single node
+ * Where:
+ *                   treeNode* node - TODO
+ * Return:           None
+ * Error:            None
+ *****************************************************************************/
+void printNode(treeNode *node);
 #endif
