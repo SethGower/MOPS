@@ -38,11 +38,11 @@ clean:
 
 # run valgrind to check for any issues
 meme: all
-	$(VAL) ./$(OUTPUT) ./file1.txt  > /dev/null
+	$(VAL) ./$(OUTPUT) ./inputs/file1.txt  > /dev/null
 
 mem: meme
 run: all
-	- $(OUTPUT) ./file1.txt
+	- $(OUTPUT) ./inputs/file1.txt
 
 gdb: all
 	gdb $(OUTPUT)
