@@ -5,18 +5,19 @@ OUTPUT_DIR=out
 
 # parameters
 CC=gcc
-CFLAGS=-I$(INCLUDE_DIR) -std=c99 -pedantic -Wall -Wextra -g
+CFLAGS=-I$(INCLUDE_DIR) -std=c99 -g #-pedantic -Wall -Wextra -g
 LIBS=-lm
 
 # output
 OUTPUT = $(OUTPUT_DIR)/offspring
 
+VAL = valgrind --tool=memcheck --leak-check=full
 
 # object files
-_OBJECTS = trimit.o offspring.o nary-tree.o
+_OBJECTS = trimit.o offspring.o nary-tree.o queueADT.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
-_HEADERS = trimit.h nary-tree.h
+_HEADERS = trimit.h nary-tree.h queueADT.h
 HEADERS = $(patsubst %,$(INCLUDE_DIR)/%,$(_HEADERS))
 
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.
@@ -31,16 +32,17 @@ $(OUTPUT): $(OBJECTS)
 
 
 # clean: remove all object files and output, use -f option.
-.PHONY: clean run help gdb
+.PHONY: clean run help gdb meme mem
 clean:
 	rm -f $(OBJECT_DIR)/*.o $(OUTPUT)
 
 # run valgrind to check for any issues
-mem: all
-	valgrind --tool=memcheck --leak-check=full ./$(OUTPUT) ./sym.1 < ./testfile > /dev/null
+meme: all
+	$(VAL) ./$(OUTPUT) ./file1.txt  > /dev/null
 
+mem: meme
 run: all
-	- $(OUTPUT) ./sym.1
+	- $(OUTPUT) ./file1.txt
 
 gdb: all
 	gdb $(OUTPUT)
