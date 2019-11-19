@@ -18,37 +18,38 @@ void freeTree(treeNode *tree) {
 }
 void printTree(treeNode *tree) {
     if (NULL != tree) {
+        size_t i = 0;
         queue_t q = que_create();
         treeNode *currNode = NULL;
-        size_t i = 0;
         que_enqueue(q, (void *)tree);
-        char *buff = (char *)malloc(1024);
-        buff[0] = 0;
+        /* performs a breadth first search starting from given node */
         while (que_size(q) > 0) {
-            currNode = (treeNode *)que_front(q);
-            que_dequeue(q);
-            strcat(buff, currNode->name);
-            strcat(buff, " had ");
-            if (currNode->numChildren) {
-                strcat(buff, currNode->children[0].name);
+            currNode = (treeNode *)que_dequeue(q); /* gets parent off queue */
+            printf("%s had ", currNode->name);
+            if (currNode->numChildren) { /* if they have children, print them */
+                for (i = 0; i < currNode->numChildren; i++)
+                    /* enqueue all of the children  */
+                    que_enqueue(q, (void *)&currNode->children[i]);
+                /* print the first child, may be only child */
+                printf("%s", currNode->children[0].name);
+                /* print children [1,numChildren) preceded by comma */
                 for (i = 1; i < currNode->numChildren - 1; i++) {
-                    strcat(buff, ", ");
-                    strcat(buff, currNode->children[i].name);
+                    printf(", %s", currNode->children[i].name);
                 }
+                /* if there are more than 1 children, then print last child
+                 * preceded by 'and' without a comma */
                 if (currNode->numChildren > 1) {
-                    strcat(buff, " and ");
-                    strcat(buff,
+                    printf(" and %s",
                            currNode->children[currNode->numChildren - 1].name);
                 }
-                strcat(buff, ".");
-            } else {
-                strcat(buff, "no offspring.");
+                /* end this lind of output with period and newline */
+                printf(".\n");
+
+            } else { /* if they didn't have kids, print that */
+                printf("no offspring.\n");
             }
-            printf("%s\n", buff);
-            buff[0] = 0;
         }
-        free(buff);
-        que_destroy(q);
+        que_destroy(q); /* free the queue */
     }
 }
 treeNode *createTree(const char *name) {
@@ -69,8 +70,7 @@ treeNode *findNode(treeNode *tree, char *name) {
     size_t i = 0;
     que_enqueue(q, (void *)tree);
     while (que_size(q) > 0) {
-        currNode = (treeNode *)que_front(q);
-        que_dequeue(q);
+        currNode = (treeNode *)que_dequeue(q);
         if (!strcmp(currNode->name, name)) {
             que_destroy(q);
             return currNode;
