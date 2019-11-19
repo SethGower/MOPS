@@ -1,5 +1,6 @@
 #include "nary-tree.h"
 #include "queueADT.h"
+#include <assert.h>
 #include <errno.h>
 #include <string.h>
 
@@ -114,4 +115,16 @@ treeNode *addChild(treeNode *tree, char *parent, char *child) {
         return parentNode;
     }
     return NULL;
+}
+
+size_t treeSize(treeNode *tree) {
+    size_t i = 0;
+    size_t num = 0;
+    if (NULL != tree) {
+        num++;
+        for (i = 0; i < tree->numChildren; i++) {
+            num += treeSize(&tree->children[i]);
+        }
+    }
+    return num;
 }

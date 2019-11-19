@@ -67,4 +67,13 @@ treeNode *findNode(treeNode *tree, char *name);
  *****************************************************************************/
 treeNode *addChild(treeNode *tree, char *parent, char *child);
 
+/******************************************************************************
+ * Function:         size_t treeSize
+ *                   Return the number of nodes in the tree
+ * Where:
+ *                   treeNode *tree - TODO
+ * Return:           size_t - number of nodes in tree
+ * Error:            None
+ *****************************************************************************/
+size_t treeSize(treeNode *tree);
 #endif
