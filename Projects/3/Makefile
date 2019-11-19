@@ -38,7 +38,7 @@ clean:
 
 # run valgrind to check for any issues
 meme: all
-	$(VAL) ./$(OUTPUT) ./inputs/file1.txt  > /dev/null
+	$(VAL) ./$(OUTPUT) ./inputs/file1.txt <./inputs/interactiveInputs.txt > /dev/null
 
 mem: meme
 run: all

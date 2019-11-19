@@ -1,0 +1,13 @@
+print
+find seth
+add john 1, seth
+init
+print
+size
+height
+add David
+add David, Seth, Mark
+print
+size
+size Seth
+quit
