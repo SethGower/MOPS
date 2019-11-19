@@ -35,8 +35,10 @@ void que_destroy(queue_t q) {
     free(q);
 }
 void que_clear(queue_t q) {
-    while (q->numElements)
+    void *currData;
+    while (q->numElements) {
         que_dequeue(q);
+    }
 }
 void que_enqueue(queue_t q, void *data) {
     assert(NULL != q);
@@ -59,12 +61,12 @@ void que_dequeue(queue_t q) {
         data = q->front->data;
         oldFront = q->front;
         q->front = q->front->next;
-        free(oldFront->data);
         free(oldFront);
-        q->numElements--;
+        if (--q->numElements == 0)
+            q->back = NULL;
     }
 }
-const void *que_front(const queue_t q) {
+void *que_front(const queue_t q) {
     if (q->front)
         return q->front->data;
     else
