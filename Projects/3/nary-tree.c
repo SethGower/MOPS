@@ -17,37 +17,39 @@ void freeTree(treeNode *tree) {
     }
 }
 void printTree(treeNode *tree) {
-    queue_t q = que_create();
-    treeNode *currNode = NULL;
-    size_t i = 0;
-    que_enqueue(q, (void *)tree);
-    char *buff = (char *)malloc(1024);
-    buff[0] = 0;
-    while (que_size(q) > 0) {
-        currNode = (treeNode *)que_front(q);
-        que_dequeue(q);
-        strcat(buff, currNode->name);
-        strcat(buff, " had ");
-        if (currNode->numChildren) {
-            strcat(buff, currNode->children[0].name);
-            for (i = 1; i < currNode->numChildren - 1; i++) {
-                strcat(buff, ", ");
-                strcat(buff, currNode->children[i].name);
-            }
-            if (currNode->numChildren > 1) {
-                strcat(buff, " and ");
-                strcat(buff,
-                       currNode->children[currNode->numChildren - 1].name);
-            }
-            strcat(buff, ".");
-        } else {
-            strcat(buff, "no offspring.");
-        }
-        printf("%s\n", buff);
+    if (NULL != tree) {
+        queue_t q = que_create();
+        treeNode *currNode = NULL;
+        size_t i = 0;
+        que_enqueue(q, (void *)tree);
+        char *buff = (char *)malloc(1024);
         buff[0] = 0;
+        while (que_size(q) > 0) {
+            currNode = (treeNode *)que_front(q);
+            que_dequeue(q);
+            strcat(buff, currNode->name);
+            strcat(buff, " had ");
+            if (currNode->numChildren) {
+                strcat(buff, currNode->children[0].name);
+                for (i = 1; i < currNode->numChildren - 1; i++) {
+                    strcat(buff, ", ");
+                    strcat(buff, currNode->children[i].name);
+                }
+                if (currNode->numChildren > 1) {
+                    strcat(buff, " and ");
+                    strcat(buff,
+                           currNode->children[currNode->numChildren - 1].name);
+                }
+                strcat(buff, ".");
+            } else {
+                strcat(buff, "no offspring.");
+            }
+            printf("%s\n", buff);
+            buff[0] = 0;
+        }
+        free(buff);
+        que_destroy(q);
     }
-    free(buff);
-    que_destroy(q);
 }
 treeNode *createTree(const char *name) {
     treeNode *tree = calloc(1, sizeof(treeNode));
@@ -116,7 +118,6 @@ treeNode *addChild(treeNode *tree, char *parent, char *child) {
     }
     return NULL;
 }
-
 size_t treeSize(treeNode *tree) {
     size_t i = 0;
     size_t num = 0;
