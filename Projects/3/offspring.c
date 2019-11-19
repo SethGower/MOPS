@@ -37,7 +37,9 @@ int main(int argc, char *argv[]) {
             }
         }
         fclose(fp);
+        printTree(tree);
         freeTree(tree);
+        free(tree);
     }
     free(buff);
     free(temp);
