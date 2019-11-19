@@ -53,7 +53,7 @@ void que_enqueue(queue_t q, void *data) {
     }
     q->numElements++;
 }
-void que_dequeue(queue_t q) {
+void *que_dequeue(queue_t q) {
     assert(NULL != q);
     void *data;
     entry_t *oldFront;
@@ -65,6 +65,7 @@ void que_dequeue(queue_t q) {
         if (--q->numElements == 0)
             q->back = NULL;
     }
+    return data;
 }
 void *que_front(const queue_t q) {
     if (q->front)
