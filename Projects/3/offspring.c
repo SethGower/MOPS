@@ -19,27 +19,28 @@ int main(int argc, char *argv[]) {
         if (NULL == fp) {                     /* check if it failed */
             perror("Offspring input file: "); /*print error on failure*/
             return EXIT_FAILURE;
-        }
-        /* loop through entire file, saving lines to buff */
-        while (getline(&buff, &buffSize, fp) > 0) {
-            /* if there is a newline character, delete it */
-            if (buff[strlen(buff) - 1] == '\n')
-                buff[strlen(buff) - 1] = 0;
-            buff = trim(buff);           /* trim the buffer */
-            tokens = strtok(buff, ",");  /* tokenize the string */
-            strcpy(temp, tokens);        /* temp is the parent name */
-            if (!tree)                   /* check if this is the root node */
-                tree = createTree(temp); /* if so, create tree */
-            /* loop through all children in the line */
-            while ((tokens = strtok(NULL, ","))) {
-                tokens = trim(tokens);
-                addChild(tree, temp, tokens);
+        } else {
+            /* loop through entire file, saving lines to buff */
+            while (getline(&buff, &buffSize, fp) > 0) {
+                /* if there is a newline character, delete it */
+                if (buff[strlen(buff) - 1] == '\n')
+                    buff[strlen(buff) - 1] = 0;
+                buff = trim(buff);          /* trim the buffer */
+                tokens = strtok(buff, ","); /* tokenize the string */
+                strcpy(temp, tokens);       /* temp is the parent name */
+                if (!tree)                  /* check if this is the root node */
+                    tree = createTree(temp); /* if so, create tree */
+                /* loop through all children in the line */
+                while ((tokens = strtok(NULL, ","))) {
+                    tokens = trim(tokens);
+                    addChild(tree, temp, tokens);
+                }
             }
+            fclose(fp);
+            printTree(tree);
+            freeTree(tree);
+            free(tree);
         }
-        fclose(fp);
-        printTree(tree);
-        freeTree(tree);
-        free(tree);
     }
     free(buff);
     free(temp);
