@@ -7,14 +7,9 @@
 typedef struct treeNode {
     char *name;
     size_t numChildren;
+    size_t childCap;
     struct treeNode *children;
 } treeNode;
-
-/* void freeTree(treeNode *tree); */
-/* void printTree(treeNode *tree); */
-/* treeNode *createNode(char *name); */
-/* treeNode *findNode(treeNode *tree, char *name); */
-/* treeNode *addChild(treeNode *tree, char *name); */
 
 /******************************************************************************
  * Function:         void freeTree
@@ -45,7 +40,7 @@ void printTree(treeNode *tree);
  * Return:           The pointer to the node that was created
  * Error:            returns NULL if an error occured and sets errno
  *****************************************************************************/
-treeNode *createNode(char *name);
+treeNode *createTree(const char *name);
 
 /******************************************************************************
  * Function:         treeNode *findNode
