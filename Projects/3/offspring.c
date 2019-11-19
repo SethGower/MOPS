@@ -9,8 +9,8 @@
 int main(int argc, char *argv[]) {
     FILE *fp = NULL;
     char *buff = malloc(MAX_BUF_SIZE);
-    char *temp = malloc(MAX_BUF_SIZE);
-    char *tokens;
+    char *parentName;
+    char *childName;
     size_t buffSize = MAX_BUF_SIZE;
     treeNode *tree = NULL;
     /* check if a filename was passed in */
@@ -25,24 +25,24 @@ int main(int argc, char *argv[]) {
                 /* if there is a newline character, delete it */
                 if (buff[strlen(buff) - 1] == '\n')
                     buff[strlen(buff) - 1] = 0;
-                buff = trim(buff);          /* trim the buffer */
-                tokens = strtok(buff, ","); /* tokenize the string */
-                strcpy(temp, tokens);       /* temp is the parent name */
-                if (!tree)                  /* check if this is the root node */
-                    tree = createTree(temp); /* if so, create tree */
+                buff = trim(buff);              /* trim the buffer */
+                parentName = strtok(buff, ","); /* tokenize the string */
+                parentName = trim(parentName);
+                if (!tree) /* check if this is the root node */
+                    tree = createTree(parentName); /* if so, create tree */
                 /* loop through all children in the line */
-                while ((tokens = strtok(NULL, ","))) {
-                    tokens = trim(tokens);
-                    addChild(tree, temp, tokens);
+                while ((childName = strtok(NULL, ","))) {
+                    childName = trim(childName);
+                    addChild(tree, parentName, childName);
                 }
             }
             fclose(fp);
             printTree(tree);
+            printf("%ld\n", treeSize(tree));
             freeTree(tree);
             free(tree);
         }
     }
     free(buff);
-    free(temp);
     return 0;
 }
