@@ -31,7 +31,7 @@ quit          # delete current tree and end program.";
         fp = fopen(argv[1], "r");             /* open the file */
         if (NULL == fp) {                     /* check if it failed */
             perror("Offspring input file: "); /*print error on failure*/
-            return EXIT_FAILURE;
+            fprintf(stderr, "error: could not open file '%s'\n", argv[1]);
         } else {
             /* loop through entire file, saving lines to buff */
             while (getline(&buff, &buffSize, fp) > 0) {
@@ -52,8 +52,7 @@ quit          # delete current tree and end program.";
             if (!strcmp(command, "add")) {
                 command = strtok(NULL, "");
                 if (NULL == command) {
-                    fprintf(stderr, "You must specify a name or list of names "
-                                    "to add to the tree\n");
+                    fprintf(stderr, "Usage: 'add parent name, child name'\n");
                     continue;
                 }
                 processLine(&tree, command);
