@@ -65,22 +65,24 @@ treeNode *createTree(const char *name) {
     return tree;
 }
 treeNode *findNode(treeNode *tree, char *name) {
-    queue_t q = que_create();
-    treeNode *currNode = NULL;
-    size_t i = 0;
-    que_enqueue(q, (void *)tree);
-    while (que_size(q) > 0) {
-        currNode = (treeNode *)que_dequeue(q);
-        if (!strcmp(currNode->name, name)) {
-            que_destroy(q);
-            return currNode;
-        } else {
-            for (i = 0; i < currNode->numChildren; i++) {
-                que_enqueue(q, (void *)&currNode->children[i]);
+    if (NULL != tree) {
+        queue_t q = que_create();
+        treeNode *currNode = NULL;
+        size_t i = 0;
+        que_enqueue(q, (void *)tree);
+        while (que_size(q) > 0) {
+            currNode = (treeNode *)que_dequeue(q);
+            if (!strcmp(currNode->name, name)) {
+                que_destroy(q);
+                return currNode;
+            } else {
+                for (i = 0; i < currNode->numChildren; i++) {
+                    que_enqueue(q, (void *)&currNode->children[i]);
+                }
             }
         }
+        que_destroy(q);
     }
-    que_destroy(q);
     return NULL;
 }
 treeNode *addChild(treeNode *tree, char *parent, char *child) {
