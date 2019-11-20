@@ -46,7 +46,9 @@ quit          # delete current tree and end program.";
             if (buff[strlen(buff) - 1] == '\n')
                 buff[strlen(buff) - 1] = 0;
             buff = trim(buff); /* trim the buffer */
-            printf("+ %s\n", buff);
+            if (!strlen(buff))
+                continue;
+            printf("+ %s\n\n", buff);
             command = strtok(buff, " ");
             command = trim(command);
             if (!strcmp(command, "add")) {
@@ -63,19 +65,22 @@ quit          # delete current tree and end program.";
                     command = "";
                 currNode = findNode(tree, command);
                 if (NULL == currNode) {
-                    fprintf(stderr, "error: '%s' not found.\n", command);
-                    continue;
-                }
-                printNode(currNode);
+                    fprintf(stderr, "error: '%s' not found.\n",
+                            (command ? command : ""));
+                } else
+                    printNode(currNode);
 
             } else if (!strcmp(command, "print")) {
                 command = strtok(NULL, "");
-                if (NULL == command) {
-                    printTree(tree);
-                } else {
+                if (NULL == command)
+                    currNode = tree;
+                else
                     currNode = findNode(tree, command);
+                if (NULL == currNode) {
+                    fprintf(stderr, "error: '%s' not found.\n",
+                            (command ? command : ""));
+                } else
                     printTree(currNode);
-                }
 
             } else if (!strcmp(command, "size")) {
                 command = strtok(NULL, "");
