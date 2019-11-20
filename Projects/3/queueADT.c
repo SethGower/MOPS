@@ -21,7 +21,6 @@ struct queueStruct {
     entry_t *front;
     entry_t *back;
     size_t numElements;
-    bool (*equiv)(void *item1, void *item2);
 };
 
 queue_t que_create() {
