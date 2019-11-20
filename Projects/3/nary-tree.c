@@ -6,6 +6,7 @@
 
 #define INITIAL_SIZE 10
 #define GROWTH_AMOUNT 10
+int compare(const void *a, const void *b) { return *(int *)a - *(int *)b; }
 void freeTree(treeNode *tree) {
     size_t i = 0;
     if (NULL != tree) {
@@ -151,4 +152,30 @@ void printNode(treeNode *node) {
             printf("no offspring.\n");
         }
     }
+}
+size_t treeHeight(treeNode *tree) {
+    int height = 0; /* running height */
+    size_t i = 0;   /* loop variable */
+    int *list;      /* list for the heights of children */
+    if (NULL == tree)
+        height = 0; /* base case for recursion */
+    else {
+        if (tree->numChildren) {
+            height = 1; /* if it has at least one child, it is guaranteed to
+                           have a height of at least 1 */
+            list = (int *)calloc(tree->numChildren, sizeof(int));
+            for (i = 0; i < tree->numChildren; i++) /* add children heights */
+                list[i] = treeHeight(&tree->children[i]);
+            /* sort the list of heights */
+            qsort((void *)list, tree->numChildren, sizeof(int), compare);
+            /* the highest height is the height of this node, so add it to the
+             * running height (which is 1) */
+            height += list[tree->numChildren - 1];
+            free(list);
+        } else {
+            /* if no children, then height is 0 */
+            height = 0;
+        }
+    }
+    return (size_t)height;
 }

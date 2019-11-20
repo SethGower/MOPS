@@ -86,4 +86,14 @@ size_t treeSize(treeNode *tree);
  * Error:            None
  *****************************************************************************/
 void printNode(treeNode *node);
+
+/******************************************************************************
+ * Function:         size_t treeHeight
+ *                   Gets the height of the tree given in parameters
+ * Where:
+ *                   treeNode *tree - TODO
+ * Return:           size_t - the height of the tree
+ * Error:            None
+ *****************************************************************************/
+size_t treeHeight(treeNode *tree);
 #endif
