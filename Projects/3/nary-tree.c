@@ -6,13 +6,14 @@
 
 #define INITIAL_SIZE 10
 #define GROWTH_AMOUNT 10
+/* compare is solely used for the qsort call in treeHeight */
 int compare(const void *a, const void *b) { return *(int *)a - *(int *)b; }
 void freeTree(treeNode *tree) {
     size_t i = 0;
     if (NULL != tree) {
         free(tree->name);
         for (i = 0; i < tree->numChildren; i++) {
-            freeTree(&tree->children[i]);
+            freeTree(&tree->children[i]); /* recursively free all children */
         }
         free(tree->children);
     }
@@ -54,6 +55,8 @@ void printTree(treeNode *tree) {
     }
 }
 treeNode *createTree(const char *name) {
+    /* allocate space for tree structure, and initialize to zero to prevent mem
+     * errors reading */
     treeNode *tree = calloc(1, sizeof(treeNode));
     if (NULL == tree) {
         perror("Create Tree");
@@ -70,6 +73,7 @@ treeNode *findNode(treeNode *tree, char *name) {
         queue_t q = que_create();
         treeNode *currNode = NULL;
         size_t i = 0;
+        /* perform the breadth first search for the name */
         que_enqueue(q, (void *)tree);
         while (que_size(q) > 0) {
             currNode = (treeNode *)que_dequeue(q);
@@ -109,16 +113,16 @@ treeNode *addChild(treeNode *tree, char *parent, char *child) {
                 perror("addChild Realloc");
             }
         }
-        childNode =
-            &parentNode->children[parentNode->numChildren]; /* temp variable */
+        /* temp variable to reduce '->' and irritation */
+        childNode = &parentNode->children[parentNode->numChildren++];
         childNode->name = malloc(strlen(child) + 1); /* get space for name */
         strcpy(childNode->name, child);              /* place name */
         childNode->numChildren = 0; /* set the node to have no children */
         childNode->childCap = 0;
         childNode->children = NULL;
-        parentNode->numChildren++;
         return parentNode;
     } else {
+        /* if the parent was not found, then print the error message */
         fprintf(stderr,
                 "error: '%s' is not in the tree and '%s' is not the root\n",
                 parent, child);
@@ -131,6 +135,7 @@ size_t treeSize(treeNode *tree) {
     if (NULL != tree) {
         num++;
         for (i = 0; i < tree->numChildren; i++) {
+            /* recursively check size of each child, adding to total */
             num += treeSize(&tree->children[i]);
         }
     }
