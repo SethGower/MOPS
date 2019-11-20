@@ -1,0 +1,46 @@
+offspring> + size
+
+size: 11
+offspring> + height
+
+height: 4
+offspring> + print
+
+john 1 had sam 2.
+sam 2 had ben 4, frances and sam 3.
+ben 4 had sam 4, ben 5, nancy 2 and holly.
+frances had no offspring.
+sam 3 had no offspring.
+sam 4 had no offspring.
+ben 5 had john 2 and sam 5.
+nancy 2 had no offspring.
+holly had no offspring.
+john 2 had no offspring.
+sam 5 had no offspring.
+offspring> + find holly
+
+holly had no offspring.
+offspring> + print nancy
+
+error: 'nancy' not found.
+offspring> + size ben 4
+
+size: 7
+offspring> + size holly
+
+size: 1
+offspring> + find sam 2
+
+sam 2 had ben 4, frances and sam 3.
+offspring> + init
+
+offspring> + size
+
+size: 0
+offspring> + print
+
+error: '' not found.
+offspring> + find
+
+error: '' not found.
+offspring> + quit

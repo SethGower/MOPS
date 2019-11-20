@@ -1,14 +1,13 @@
-print
-find seth
-add john 1, seth
+size
 height
+print
+find holly
+print nancy
+size ben 4
+size holly
+find sam 2
 init
-print
 size
-height
-add David
-add David, Seth, Mark
 print
-size
-size Seth
+find
 quit

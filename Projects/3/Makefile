@@ -32,7 +32,7 @@ $(OUTPUT): $(OBJECTS)
 
 
 # clean: remove all object files and output, use -f option.
-.PHONY: clean run help gdb meme mem
+.PHONY: clean run help gdb meme mem tests
 clean:
 	rm -f $(OBJECT_DIR)/*.o $(OUTPUT)
 
@@ -50,3 +50,9 @@ gdb: all
 # help: list available make options
 help:
 	@echo "Make options:  all, mem, clean, help"
+
+tests: all
+	- $(OUTPUT) ./inputs/file1.txt < inputs/interactiveInputs.txt &> $(OUTPUT_DIR)/file1out.txt
+	- diff -s $(OUTPUT_DIR)/file1out.txt ./expected/file1.txt
+	- $(OUTPUT) ./inputs/file2.txt < inputs/interactiveInputs2.txt &> $(OUTPUT_DIR)/file2out.txt
+	- diff -s $(OUTPUT_DIR)/file2out.txt ./expected/file2.txt
