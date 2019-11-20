@@ -118,6 +118,10 @@ treeNode *addChild(treeNode *tree, char *parent, char *child) {
         childNode->children = NULL;
         parentNode->numChildren++;
         return parentNode;
+    } else {
+        fprintf(stderr,
+                "error: '%s' is not in the tree and '%s' is not the root\n",
+                parent, child);
     }
     return NULL;
 }
