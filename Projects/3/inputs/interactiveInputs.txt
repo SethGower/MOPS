@@ -1,6 +1,7 @@
 print
 find seth
 add john 1, seth
+height
 init
 print
 size

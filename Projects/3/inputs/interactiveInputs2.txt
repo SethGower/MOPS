@@ -1,0 +1,20 @@
+help
+add
+find
+find Uncle Joe
+size Uncle Joe
+height Uncle Joe
+height
+size
+print
+size Uncle Joe
+print
+find Nobody
+size Nobody
+height Nobody
+init
+find
+print
+size
+height
+quit
