@@ -70,7 +70,7 @@ quit          # delete current tree and end program.";
                 /* this line simply gets the remaining parts of the command
                  * (parent child list for add for example) */
                 command = strtok(NULL, "");
-                if (NULL == command) {
+                if (NULL == command || !strchr(buff, ',')) {
                     fprintf(stderr, "Usage: 'add parent name, child name'\n");
                     continue;
                 }
