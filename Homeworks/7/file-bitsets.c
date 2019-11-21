@@ -67,7 +67,8 @@ int main(int argc, char *argv[]) {
         printf("set1 set_complement:	0x%016lx\n", set_complement(set1));
         printf("set2 set_complement:	0x%016lx\n", set_complement(set2));
         putchar('\n');
-        printf("set_difference:		0x%016lx\n", set_difference(set1, set2));
+        printf("set_difference:		0x%016lx\n",
+               set_difference(set1, set2));
         printf("set_symdifference:	0x%016lx\n",
                set_symdifference(set1, set2));
         putchar('\n');

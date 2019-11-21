@@ -10,7 +10,7 @@
  *      ANSI character sequences are used to achieve this.
  *      A future version may use the curses library.
  *
- * Revisions: 
+ * Revisions:
  *    $Log: display.h,v $
  *    Revision 1.3  2014/12/06 03:04:20  csci243
  *    Fixed comment about coordinate system.
@@ -26,10 +26,9 @@
 #ifndef RITCSFIGURES_DISPLAY_H
 #define RITCSFIGURES_DISPLAY_H
 
-
 /// Clear the terminal window of all characters.
 /// The terminal window display is modified.
-/// 
+///
 void clear();
 
 /// Cause a character to appear at the current position of the cursor.
@@ -38,7 +37,7 @@ void clear();
 /// Arguments
 ///   character: the character to be shown
 ///
-void put( char character );
+void put(char character);
 
 /// Move the cursor to position specified.
 /// No visible display changes, but the cursor is modified.
@@ -48,7 +47,7 @@ void put( char character );
 /// Arguments
 ///   rCursor: the destination row
 ///   cCursor: the destination column
-/// 
-void set_cur_pos( int rCursor, int cCursor);
+///
+void set_cur_pos(int rCursor, int cCursor);
 
 #endif

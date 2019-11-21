@@ -24,6 +24,6 @@
  * the caller is responsible for freeing the returned strings
  */
 
-int parse( char *str, char *fields[], size_t count );
+int parse(char *str, char *fields[], size_t count);
 
 #endif

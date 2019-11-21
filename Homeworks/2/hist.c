@@ -1,11 +1,11 @@
 /******************************************************************************
-* File:             hist.c
-*
-* Author:           Seth Gower  
-* Created:          09/06/19 
-* Description:      Histogram program to read in standard input and create a
-*                   histogram of the number of characters
-*****************************************************************************/
+ * File:             hist.c
+ *
+ * Author:           Seth Gower
+ * Created:          09/06/19
+ * Description:      Histogram program to read in standard input and create a
+ *                   histogram of the number of characters
+ *****************************************************************************/
 
 #include "hist.h"
 #include <stdio.h>

@@ -2,32 +2,30 @@
 // @author CS@RIT.EDU
 // @contributor tjb
 
-
 #ifndef _RACER_H
 #define _RACER_H
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#define FINISH_LINE 70    ///< terminal column of victory
-#define MAX_NAME_LEN 9    ///< not including the trailing NUL byte
-#define DEFAULT_WAIT 200  ///< default wait time milliseconds
+#define FINISH_LINE 70   ///< terminal column of victory
+#define MAX_NAME_LEN 9   ///< not including the trailing NUL byte
+#define DEFAULT_WAIT 200 ///< default wait time milliseconds
 
-/// Rcr struct 
+/// Rcr struct
 typedef struct Rcr {
 
-    int dist;             ///< current distance from starting line (column)
+    int dist; ///< current distance from starting line (column)
 
-    int row;              ///< vertical position of racer, i.e. "racing lane"
+    int row; ///< vertical position of racer, i.e. "racing lane"
 
-    char *graphic;        ///< graphic: the drawable text
+    char *graphic; ///< graphic: the drawable text
 } racer_t;
 
-
 /// init_racers - Do setup work for all racers at the start of the program.
-/// @param milliseconds length of pause between steps in animation 
+/// @param milliseconds length of pause between steps in animation
 
-void init_racers( long milliseconds );
+void init_racers(long milliseconds);
 
 /// make_racer - Create a new racer.
 ///
@@ -36,13 +34,13 @@ void init_racers( long milliseconds );
 /// @return racer_t pointer a dynamically allocated racer_t object
 /// @pre strlen( name ) < MAX_NAME_LEN, for display reasons.
 
-racer_t *make_racer( char *name, int position );
+racer_t *make_racer(char *name, int position);
 
 /// destroy_racer - Destroy all dynamically allocated storage for a racer.
 ///
 /// @param racer the object to be de-allocated
 
-void destroy_racer( racer_t *racer );
+void destroy_racer(racer_t *racer);
 
 /// run Run one racer in the race.
 ///
@@ -50,7 +48,7 @@ void destroy_racer( racer_t *racer );
 ///   The racer starts at the start position, column 1.
 ///   The racer's graphic (text name) is displayed.
 /// The actions below happen repetitively, until its position is at FINISH_LINE:
-///   Randomly calculate a waiting period, between 0 and 
+///   Randomly calculate a waiting period, between 0 and
 ///     the value given to init_racers
 ///   Sleep for that length of time.
 ///   Change the display position of this racer by +1 column*:
@@ -62,10 +60,10 @@ void destroy_racer( racer_t *racer );
 ///
 /// *note: code must ensure that each 1 column move of one racer is "atomic".
 ///
-/// @param racer a racer_t pointer, declared as void* for pthread compatibility 
-/// @return void pointer to result  
+/// @param racer a racer_t pointer, declared as void* for pthread compatibility
+/// @return void pointer to result
 /// @pre racer cannot be NULL.
 
-void *run( void *racer );
+void *run(void *racer);
 
 #endif
