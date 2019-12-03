@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     treeNode *tree = NULL;
     size_t i = 0;
     const char *prompt = "offspring> "; /* promt text */
+    bool running = true;
     /* help text for printing */
     const char *helpText = "\
 User Commands for offspring:\n\
@@ -43,7 +44,7 @@ quit          # delete current tree and end program.";
         }
     }
     /* main command loop */
-    while (true) {
+    do {
         printf("%s", prompt); /* print the prompt */
         /* if nothing is read in, then continue */
         if (getline(&buff, &buffSize, stdin) > 0) {
@@ -144,8 +145,12 @@ quit          # delete current tree and end program.";
             } else {
                 fprintf(stderr, "'%s' is not a valid command\n", command);
             }
+        } else {
+            putchar('\n');
+            running = false;
         }
-    }
+
+    } while (running);
     /* free all memory */
     free(buff);
     freeTree(tree);
