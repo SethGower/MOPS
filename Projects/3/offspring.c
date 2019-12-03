@@ -82,7 +82,7 @@ quit          # delete current tree and end program.";
                 command = strtok(NULL, "");
                 if (NULL == command) /* if no optional command, set the string
                                         to search for to '' */
-                    command = "";
+                    command = (tree ? tree->name : "");
                 currNode = findNode(tree, command);
                 if (NULL == currNode) { /* if nothing was found */
                     fprintf(stderr, "error: '%s' not found.\n",
