@@ -5,7 +5,7 @@ OUTPUT_DIR=out
 
 # parameters
 CC=gcc
-CFLAGS=-I$(INCLUDE_DIR) -std=c99 -g #-pedantic -Wall -Wextra -g
+CFLAGS=-I$(INCLUDE_DIR) -std=c99 -g -pedantic -Wall -Wextra -g
 LIBS=-lm
 
 # output

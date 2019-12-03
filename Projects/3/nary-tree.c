@@ -142,7 +142,6 @@ size_t treeSize(treeNode *tree) {
     return num;
 }
 void printNode(treeNode *node) {
-    size_t i = 0;
     if (NULL != node) {
         printf("%s had ", node->name);
         if (node->numChildren) { /* if they have children, print them */
@@ -162,7 +161,7 @@ void printNode(treeNode *node) {
         }
     }
 }
-size_t treeHeight(treeNode *tree) {
+int treeHeight(treeNode *tree) {
     int height = 0; /* running height */
     size_t i = 0;   /* loop variable */
     int *list;      /* list for the heights of children */

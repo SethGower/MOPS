@@ -127,7 +127,7 @@ quit          # delete current tree and end program.";
                 } else {
                     currNode = findNode(tree, command);
                 }
-                printf("height: %ld\n", (currNode ? treeHeight(currNode) : -1));
+                printf("height: %d\n", (currNode ? treeHeight(currNode) : -1));
 
             } else if (!strcmp(command, "help")) {
                 printf("%s\n", helpText);

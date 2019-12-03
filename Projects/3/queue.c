@@ -34,7 +34,6 @@ void que_destroy(queue_t q) {
     free(q);
 }
 void que_clear(queue_t q) {
-    void *currData;
     while (q->numElements) {
         que_dequeue(q);
     }

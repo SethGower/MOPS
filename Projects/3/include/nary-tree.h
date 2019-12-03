@@ -97,5 +97,5 @@ void printNode(treeNode *node);
  * Return:           size_t - the height of the tree
  * Error:            None
  *****************************************************************************/
-size_t treeHeight(treeNode *tree);
+int treeHeight(treeNode *tree);
 #endif
