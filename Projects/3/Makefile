@@ -14,10 +14,10 @@ OUTPUT = $(OUTPUT_DIR)/offspring
 VAL = valgrind --tool=memcheck --leak-check=full
 
 # object files
-_OBJECTS = trimit.o offspring.o nary-tree.o queueADT.o
+_OBJECTS = trimit.o offspring.o nary-tree.o queue.o
 OBJECTS = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJECTS))
 
-_HEADERS = trimit.h nary-tree.h queueADT.h
+_HEADERS = trimit.h nary-tree.h queue.h
 HEADERS = $(patsubst %,$(INCLUDE_DIR)/%,$(_HEADERS))
 
 #define compile rule for object files. If a C file changes, generate its .obj under /obj.

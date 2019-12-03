@@ -1,5 +1,5 @@
 #include "nary-tree.h"
-#include "queueADT.h"
+#include "queue.h"
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
