@@ -14,11 +14,8 @@
 
 /// Rcr struct
 typedef struct Rcr {
-
-    int dist; ///< current distance from starting line (column)
-
-    int row; ///< vertical position of racer, i.e. "racing lane"
-
+    int dist;      ///< current distance from starting line (column)
+    int row;       ///< vertical position of racer, i.e. "racing lane"
     char *graphic; ///< graphic: the drawable text
 } racer_t;
 
