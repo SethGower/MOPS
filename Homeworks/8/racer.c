@@ -43,19 +43,19 @@ void *run(void *racer) {
     putRacer(temp, 1);
     long delay = 0;
     while (temp->dist <= FINISH_LINE) {
-        /* lockResult = pthread_mutex_lock(&lock); */
-        /* if (lockResult) { */
-        /*     perror("entering run function"); */
-        /*     return NULL; */
-        /* } */
         delay = rand() % delayMax;
         usleep(delay * 1000);
+        lockResult = pthread_mutex_lock(&lock);
+        if (lockResult) {
+            perror("entering run function");
+            return NULL;
+        }
         putRacer(temp, ++temp->dist);
-        /* lockResult = pthread_mutex_unlock(&lock); */
-        /* if (lockResult) { */
-        /*     perror("exiting run function"); */
-        /*     return NULL; */
-        /* } */
+        lockResult = pthread_mutex_unlock(&lock);
+        if (lockResult) {
+            perror("exiting run function");
+            return NULL;
+        }
     }
     return NULL;
 }
