@@ -36,14 +36,7 @@ clean:
 
 # run valgrind to check for any issues
 mem: all
-	@echo "Testing '$(OUTPUT) hello there' for memory violations"> $(MEM_OUT)
-	@echo "===================================================================" >>$(MEM_OUT)
-	- $(VAL) $(OUTPUT) hello there> /dev/null 2>> $(MEM_OUT)
-	@cat $(MEM_OUT)
-	@echo "Testing '$(OUTPUT) ./file-bitsets.c there' for memory violations">> $(MEM_OUT)
-	@echo "===================================================================" >>$(MEM_OUT)
-	- $(VAL) $(OUTPUT) file-bitsets.c there> /dev/null 2>> $(MEM_OUT)
-	@cat $(MEM_OUT)
+	$(VAL) $(OUTPUT) 1 racer1 racer2 racer3 > /dev/null
 
 run: all
 	$(OUTPUT) 100 fuck me up
