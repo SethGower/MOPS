@@ -19,42 +19,43 @@ racer_t *make_racer(char *name, int position) {
     racer->row = position;
     racer->graphic = malloc(strlen(name) + 1);
     strcpy(racer->graphic, name);
-    racer->dist = 1;
+    racer->dist = 0;
     return racer;
 }
 void destroy_racer(racer_t *racer) {
-    free(racer->graphic);
-    free(racer);
+    if (NULL != racer) {
+        free(racer->graphic);
+        free(racer);
+    }
 }
 void putRacer(racer_t *racer, int col) {
-    int i = 0;
-    set_cur_pos(racer->row, col - 1);
+    size_t i = 0;
+    set_cur_pos(racer->row + 1, col - 1);
     put(' ');
     for (i = 0; i < strlen(racer->graphic); i++) {
-        set_cur_pos(racer->row, col + i);
+        set_cur_pos(racer->row + 1, col + i);
         put(racer->graphic[i]);
     }
 }
 void *run(void *racer) {
     int lockResult;
     racer_t *temp = (racer_t *)racer;
-    srand(41);
     putRacer(temp, 1);
     long delay = 0;
     while (temp->dist <= FINISH_LINE) {
-        lockResult = pthread_mutex_lock(&lock);
-        if (lockResult) {
-            perror("entering run function");
-            return NULL;
-        }
+        /* lockResult = pthread_mutex_lock(&lock); */
+        /* if (lockResult) { */
+        /*     perror("entering run function"); */
+        /*     return NULL; */
+        /* } */
         delay = rand() % delayMax;
-        usleep(delay);
+        usleep(delay * 1000);
         putRacer(temp, ++temp->dist);
-        lockResult = pthread_mutex_unlock(&lock);
-        if (lockResult) {
-            perror("exiting run function");
-            return NULL;
-        }
+        /* lockResult = pthread_mutex_unlock(&lock); */
+        /* if (lockResult) { */
+        /*     perror("exiting run function"); */
+        /*     return NULL; */
+        /* } */
     }
     return NULL;
 }
